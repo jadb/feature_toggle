@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit bootstrap="tests/bootstrap.php" colors="true">
+    <testsuites>
+        <testsuite name="FeatureToggle Test Suite">
+            <directory>tests/FeatureToggle/</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory suffix=".php">src/FeatureToggle/</directory>
+        </whitelist>
+    </filter>
+</phpunit>
