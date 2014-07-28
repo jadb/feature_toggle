@@ -40,7 +40,7 @@ class UserAgentStrategy extends AbstractStrategy
     /**
      * {@inheritdoc}
      */
-    public function __invoke($Feature)
+    public function __invoke($Feature, array $args = [])
     {
         $userAgent = $this->getUserAgent();
 

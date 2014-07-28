@@ -23,7 +23,7 @@ class TestStrategy extends AbstractStrategy
     /**
      * {@inheritdoc}
      */
-    public function __invoke($Feature)
+    public function __invoke($Feature, array $args = [])
     {
         return;
     }
