@@ -30,7 +30,7 @@ class TestFeature extends AbstractFeature
     /**
      * {@inheritdoc}
      */
-    public function isEnabled()
+    public function isEnabled(array $args = [])
     {
         return $this->isEnabled;
     }

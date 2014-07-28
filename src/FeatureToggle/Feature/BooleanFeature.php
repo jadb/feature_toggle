@@ -50,7 +50,7 @@ class BooleanFeature extends AbstractFeature
     /**
      * {@inheritdoc}
      */
-    public function isEnabled()
+    public function isEnabled(array $args = [])
     {
         $strategies = $this->getStrategies();
         if (empty($strategies)) {
@@ -60,7 +60,7 @@ class BooleanFeature extends AbstractFeature
         $isEnabled = false;
 
         foreach ($strategies as $strategy) {
-            if (call_user_func($strategy, $this)) {
+            if (call_user_func($strategy, $this, $args)) {
                 $isEnabled = true;
                 break;
             }

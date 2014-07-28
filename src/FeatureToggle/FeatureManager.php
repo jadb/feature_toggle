@@ -25,8 +25,8 @@ class FeatureManager
      * @param string $feature Feature's name.
      * @return boolean
      */
-    public static function isEnabled($feature)
+    public static function isEnabled($feature, array $args = [])
     {
-        return FeatureRegistry::get($feature)->isEnabled();
+        return FeatureRegistry::get($feature)->isEnabled($args);
     }
 }

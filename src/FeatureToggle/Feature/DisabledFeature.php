@@ -23,7 +23,7 @@ class DisabledFeature extends BooleanFeature
     /**
      * {@inheritdoc}
      */
-    public function isEnabled()
+    public function isEnabled(array $args = [])
     {
         return false;
     }
