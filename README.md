@@ -24,8 +24,7 @@ From [Wikipedia](http://en.wikipedia.org/wiki/Feature_toggle):
 FeatureToggle can be installed using [Composer][composer] (of course, you could always 
 clone it from GitHub).
 
-In `composer.json`, define your development dependency on Monohook using the suggested 
-parameters below:
+In `composer.json`:
 
 ```json
 {
