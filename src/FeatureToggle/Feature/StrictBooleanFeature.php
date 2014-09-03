@@ -16,37 +16,10 @@ namespace FeatureToggle\Feature;
  *
  * @package FeatureToggle
  * @subpackage FeatureToggle.Feature
- * @author Jad Bitar <jadbitar@mac.com>
+ * @author Raúl Santos <borfast@gmail.com>
  */
-class BooleanFeature extends AbstractFeature
+class StrictBooleanFeature extends BooleanFeature
 {
-    /**
-     * Default feature's state.
-     *
-     * @var boolean
-     */
-    protected $isEnabled = false;
-
-    /**
-     * Sets feature's default state to disabled.
-     *
-     * @return void
-     */
-    public function disable()
-    {
-        $this->isEnabled = false;
-    }
-
-    /**
-     * Sets feature's default state to enabled.
-     *
-     * @return void
-     */
-    public function enable()
-    {
-        $this->isEnabled = true;
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -57,11 +30,11 @@ class BooleanFeature extends AbstractFeature
             return $this->isEnabled;
         }
 
-        $isEnabled = false;
+        $isEnabled = true;
 
         foreach ($strategies as $strategy) {
-            if (call_user_func($strategy, $this, $args)) {
-                $isEnabled = true;
+            if (!call_user_func($strategy, $this, $args)) {
+                $isEnabled = false;
                 break;
             }
         }

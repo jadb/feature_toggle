@@ -26,7 +26,7 @@ interface StrategyInterface
      * @param FeatureInterface $Feature
      * @return boolean
      */
-    public function __invoke($Feature);
+    public function __invoke($Feature, array $args = []);
 
     /**
      * Returns strategy's name.

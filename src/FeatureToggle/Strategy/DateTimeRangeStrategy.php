@@ -58,7 +58,7 @@ class DateTimeRangeStrategy extends AbstractStrategy
     /**
      * {@inheritdoc}
      */
-    public function __invoke($Feature)
+    public function __invoke($Feature, array $args = [])
     {
         $strategies = array();
         $comparators = array('minRange' => '>', 'maxRange' => '<');

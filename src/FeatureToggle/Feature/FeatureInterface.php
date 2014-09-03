@@ -39,7 +39,7 @@ interface FeatureInterface
      *
      * @return mixed
      */
-    public function isEnabled();
+    public function isEnabled(array $args = []);
 
     /**
      * Sets the feature's descriptions.
