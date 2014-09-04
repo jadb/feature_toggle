@@ -10,7 +10,12 @@
             "name": "Jad Bitar",
             "email": "jadbitar@mac.com",
             "homepage": "http://jadb.io"
+        },
+        {
+            "name": "Raúl Pedro Santos",
+            "homepage": "http://www.borfast.com"
         }
+
     ],
     "support": {
         "issues": "http://github.com/jadb/feature_toggle/issues",
