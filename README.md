@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/jadb/feature_toggle.svg?branch=master)](https://travis-ci.org/jadb/feature_toggle)
+
 # Feature Toggle
 
 _a.k.a. Feature Flip, Feature Flag, Feature Switch_
