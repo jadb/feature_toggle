@@ -8,11 +8,11 @@ _a.k.a. Feature Flip, Feature Flag, Feature Switch_
 
 From [Wikipedia](http://en.wikipedia.org/wiki/Feature_toggle):
 
-> Feature Toggle is a technique in software development that attempts to provide an 
+> Feature Toggle is a technique in software development that attempts to provide an
 > alternative to maintaining multiple source code branches, called feature branches.
 >
-> Continuous release and continuous deployment enables you to have quick feedback 
-> about your coding. This requires you to integrate your changes as early as possible. 
+> Continuous release and continuous deployment enables you to have quick feedback
+> about your coding. This requires you to integrate your changes as early as possible.
 > Feature branches introduce a by-pass to this process. Feature toggles brings you back
 > to the track, but the execution paths of your feature is still “dead” and “untested”,
 > if a toggle is “off”. But the effort is low to enable the new execution paths just by
@@ -25,7 +25,7 @@ From [Wikipedia](http://en.wikipedia.org/wiki/Feature_toggle):
 
 ## Install
 
-FeatureToggle can be installed using [Composer][composer] (of course, you could always 
+FeatureToggle can be installed using [Composer][composer] (of course, you could always
 clone it from GitHub).
 
 In `composer.json`:
@@ -81,7 +81,7 @@ if (\FeatureToggle\FeatureManager::isEnabled('Cool Feature')) {
 * __EnabledFeature__: Forces feature to always be enabled.
 * __DisabledFeature__: Forces feature to always be disabled.
 
-_Features __MUST__ implement `FeatureInterface`._
+Features __MUST__ implement the `FeatureInterface`.
 
 ### Strategies
 
@@ -89,7 +89,7 @@ _Features __MUST__ implement `FeatureInterface`._
 * __DateTimeRangeStrategy__: Checks if today's time is in set date time range.
 * __UserAgentStrategy__: Checks if browser's user agent matches any allowed agent.
 
-_Strategies __MUST__ implement `StrategyInterface`._
+Strategies __MUST__ implement the `StrategyInterface`.
 
 ## Todo
 
