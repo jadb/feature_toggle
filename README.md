@@ -1,4 +1,6 @@
 [![Build Status](https://travis-ci.org/jadb/feature_toggle.svg?branch=master)](https://travis-ci.org/jadb/feature_toggle)
+[![Total Downloads](https://poser.pugx.org/jadb/feature_toggle/downloads.svg)](https://packagist.org/packages/jadb/feature_toggle)
+[![License](https://poser.pugx.org/jadb/feature_toggle/license.svg)](https://packagist.org/packages/jadb/feature_toggle)
 
 # Feature Toggle
 
