@@ -82,9 +82,9 @@ class FeatureRegistry
     /**
      * Initializes feature and adds it to registry.
      *
-     * @param [type] $name [description]
-     * @param array $config [description]
-     * @return [type]
+     * @param string $name Feature's name.
+     * @param array $config Feature configuration.
+     * @return Feature\FeatureInterface Feature object.
      */
     public static function init($name, $config = array())
     {
