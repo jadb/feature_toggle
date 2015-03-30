@@ -63,6 +63,20 @@ FeatureRegistry::init('Cool Feature', [
 		}
 	]
 ]);
+
+FeatureRegistry::init('Another Cool Feature', [
+	'type' => 'threshold', // use the `ThresholdFeature`
+	'description' => 'Another cool new feature!',
+	'strategies' => [
+		'UserAgent' => [['/opera/', '/Mozilla\/5\.0/']],
+		function ($Feature) {
+			return !empty($_SESSION['isAdmin']);
+		},
+		function ($Feature) {
+			return !empty($_SESSION[$Feature->getName()]);
+		}
+	]
+])->threshold(2); // Require at least 2 strategies to pass
 ```
 
 and then, anywhere in your code, you can check this feature's status like so:
@@ -77,7 +91,9 @@ if (\FeatureToggle\FeatureManager::isEnabled('Cool Feature')) {
 
 ### Features
 
-* __BooleanFeature__: Tells if feature is enabled or not based on a set of strategies.
+* __BooleanFeature__: Enabled if one ore more strategies pass.
+* __StrictBooleanFeature__: Enabled only if entire strategies' set passes.
+* __ThresholdFeature__: Enabled only if a minimum number of strategies pass.
 * __EnabledFeature__: Forces feature to always be enabled.
 * __DisabledFeature__: Forces feature to always be disabled.
 
@@ -93,7 +109,7 @@ Strategies __MUST__ implement the `StrategyInterface`.
 
 ## Todo
 
-* Enable feature only when {n} (or all) strategies pass
+* ~~Enable feature only when {n} (or all) strategies pass~~
 * `RedisStorage` to keep track of features
 * `PercentageStrategy` enable feature to a percentage of users - requires `RedisStorage`
 * Option to automatically disable a feature if error threshold reached - requires `RedisStorage`
