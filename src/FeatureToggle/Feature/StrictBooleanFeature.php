@@ -16,6 +16,7 @@ namespace FeatureToggle\Feature;
  *
  * @package FeatureToggle
  * @subpackage FeatureToggle.Feature
+ * @author Jad Bitar <bitarjad@gmail.com>
  * @author Raúl Santos <borfast@gmail.com>
  */
 class StrictBooleanFeature extends BooleanFeature
@@ -23,22 +24,15 @@ class StrictBooleanFeature extends BooleanFeature
     /**
      * {@inheritdoc}
      */
+    protected $strict = true;
+
+    /**
+     * {@inheritdoc}
+     */
     public function isEnabled(array $args = [])
     {
         $strategies = $this->getStrategies();
-        if (empty($strategies)) {
-            return $this->isEnabled;
-        }
-
-        $isEnabled = true;
-
-        foreach ($strategies as $strategy) {
-            if (!call_user_func($strategy, $this, $args)) {
-                $isEnabled = false;
-                break;
-            }
-        }
-
-        return $isEnabled;
+        $this->threshold = count($strategies);
+        return $this->check($args);
     }
 }

@@ -28,6 +28,20 @@ class BooleanFeature extends AbstractFeature
     protected $isEnabled = false;
 
     /**
+     * Mode.
+     *
+     * @var boolean
+     */
+    protected $strict = false;
+
+    /**
+     * Minimum number of strategies to pass for a feature to be considered enabled.
+     *
+     * @var integer
+     */
+    protected $threshold = 1;
+
+    /**
      * Sets feature's default state to disabled.
      *
      * @return void
@@ -52,20 +66,28 @@ class BooleanFeature extends AbstractFeature
      */
     public function isEnabled(array $args = [])
     {
+        return $this->check($args);
+    }
+
+    /**
+     * Tells if feature is enabled.
+     *
+     * @return bool
+     */
+    protected function check(array $args)
+    {
+        $isEnabled = (int)$this->isEnabled;
         $strategies = $this->getStrategies();
         if (empty($strategies)) {
-            return $this->isEnabled;
+            return (bool)$isEnabled;
         }
-
-        $isEnabled = false;
 
         foreach ($strategies as $strategy) {
             if (call_user_func($strategy, $this, $args)) {
-                $isEnabled = true;
-                break;
+                $isEnabled++;
             }
         }
 
-        return $isEnabled;
+        return $isEnabled > $this->threshold || (!$this->strict && ($isEnabled === $this->threshold));
     }
 }
