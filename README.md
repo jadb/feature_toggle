@@ -51,18 +51,18 @@ In your application's bootstrap:
 ```php
 use FeatureToggle\FeatureRegistry;
 
-FeatureRegistry::init('Cool Feature', array(
+FeatureRegistry::init('Cool Feature', [
 	'description' => 'A cool new feature!',
-	'strategies' => array(
-		'UserAgent' => array(array('/opera/', '/Mozilla\/5\.0/')),
+	'strategies' => [
+		'UserAgent' => [['/opera/', '/Mozilla\/5\.0/']],
 		function ($Feature) {
 			return !empty($_SESSION['isAdmin']);
 		},
 		function ($Feature) {
 			return !empty($_SESSION[$Feature->getName()]);
 		}
-	)
-));
+	]
+]);
 ```
 
 and then, anywhere in your code, you can check this feature's status like so:
