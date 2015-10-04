@@ -50,6 +50,9 @@ In your application's bootstrap:
 
 ```php
 use FeatureToggle\FeatureRegistry;
+use Predis\Client as Redis;
+
+FeatureRegistry::setStorage(new Redis());
 
 FeatureRegistry::init('Cool Feature', [
     'description' => 'A cool new feature!',
