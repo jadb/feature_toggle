@@ -11,6 +11,9 @@
 
 namespace FeatureToggle;
 
+use FeatureToggle\Storage\HashStorage;
+use FeatureToggle\Storage\StorageInterface;
+
 /**
  * Feature registry.
  *
@@ -19,12 +22,38 @@ namespace FeatureToggle;
  */
 class FeatureRegistry
 {
-    /**
-     * Features registry.
+
+   /**
+     * Storage.
      *
-     * @var array
+     * @var \FeatureToggle\Storage\StorageInterface
      */
-    protected static $features = array();
+    protected static $storage;
+
+    /**
+     * Storage setter.
+     *
+     * @param \FeatureToggle\Storage\StorageInterface $storage Storage.
+     */
+    public static function setStorage(StorageInterface $storage)
+    {
+        static::$storage = $storage;
+    }
+
+    /**
+     * Storage getter.
+     *
+     * @return \FeatureToggle\Storage\HashStorage|\FeatureToggle\Storage\StorageInterface
+     */
+    protected static function getStorage()
+    {
+        if (!$storage = static::$storage) {
+            $storage = new HashStorage();
+            static::setStorage($storage);
+        }
+
+        return $storage;
+    }
 
     /**
      * Adds feature to registry.
@@ -35,11 +64,7 @@ class FeatureRegistry
      */
     public static function add($name, Feature\FeatureInterface $Feature)
     {
-        if (static::check($name)) {
-            throw new \InvalidArgumentException('Duplicate feature identifier.');
-        }
-
-        static::$features[$name] = $Feature;
+        static::getStorage()->add($name, $Feature);
     }
 
     /**
@@ -50,7 +75,12 @@ class FeatureRegistry
      */
     public static function check($name)
     {
-        return array_key_exists($name, static::$features);
+        try {
+            static::getStorage()->get($name);
+            return true;
+        } catch (\InvalidArgumentException $e) {
+            return false;
+        }
     }
 
     /**
@@ -60,7 +90,7 @@ class FeatureRegistry
      */
     public static function flush()
     {
-        static::$features = array();
+        static::getStorage()->flush();
     }
 
     /**
@@ -72,11 +102,7 @@ class FeatureRegistry
      */
     public static function get($name)
     {
-        if (!static::check($name)) {
-            throw new \InvalidArgumentException('Unknown feature identifier.');
-        }
-
-        return static::$features[$name];
+        return static::getStorage()->get($name);
     }
 
     /**
@@ -89,7 +115,8 @@ class FeatureRegistry
     public static function init($name, $config = array())
     {
         $FeatureBuilder = new FeatureBuilder();
-        static::add($name, $FeatureBuilder->createFeature($name, $config));
-        return static::get($name);
+        $feature = $FeatureBuilder->createFeature($name, $config);
+        static::getStorage()->add($name, $feature);
+        return $feature;
     }
 }
