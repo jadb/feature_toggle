@@ -52,30 +52,30 @@ In your application's bootstrap:
 use FeatureToggle\FeatureRegistry;
 
 FeatureRegistry::init('Cool Feature', [
-	'description' => 'A cool new feature!',
-	'strategies' => [
-		'UserAgent' => [['/opera/', '/Mozilla\/5\.0/']],
-		function ($Feature) {
-			return !empty($_SESSION['isAdmin']);
-		},
-		function ($Feature) {
-			return !empty($_SESSION[$Feature->getName()]);
-		}
-	]
+    'description' => 'A cool new feature!',
+    'strategies' => [
+        'UserAgent' => [['/opera/', '/Mozilla\/5\.0/']],
+        function ($Feature) {
+            return !empty($_SESSION['isAdmin']);
+        },
+        function ($Feature) {
+            return !empty($_SESSION[$Feature->getName()]);
+        }
+    ]
 ]);
 
 FeatureRegistry::init('Another Cool Feature', [
-	'type' => 'threshold', // use the `ThresholdFeature`
-	'description' => 'Another cool new feature!',
-	'strategies' => [
-		'UserAgent' => [['/opera/', '/Mozilla\/5\.0/']],
-		function ($Feature) {
-			return !empty($_SESSION['isAdmin']);
-		},
-		function ($Feature) {
-			return !empty($_SESSION[$Feature->getName()]);
-		}
-	]
+    'type' => 'threshold', // use the `ThresholdFeature`
+    'description' => 'Another cool new feature!',
+    'strategies' => [
+        'UserAgent' => [['/opera/', '/Mozilla\/5\.0/']],
+        function ($Feature) {
+            return !empty($_SESSION['isAdmin']);
+        },
+        function ($Feature) {
+            return !empty($_SESSION[$Feature->getName()]);
+        }
+    ]
 ])->threshold(2); // Require at least 2 strategies to pass
 ```
 
@@ -83,7 +83,7 @@ and then, anywhere in your code, you can check this feature's status like so:
 
 ```php
 if (\FeatureToggle\FeatureManager::isEnabled('Cool Feature')) {
-	// do something
+    // do something
 }
 ```
 
