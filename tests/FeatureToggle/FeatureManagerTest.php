@@ -9,7 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace FeatureToggle;
+namespace FeatureToggle\Test;
+
+use FeatureToggle\FeatureManager;
+use FeatureToggle\FeatureRegistry;
 
 /**
  * Test FeatureManager class.

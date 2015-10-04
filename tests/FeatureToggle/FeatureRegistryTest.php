@@ -9,7 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace FeatureToggle;
+namespace FeatureToggle\Test;
+
+use FeatureToggle\Feature\BooleanFeature;
+use FeatureToggle\FeatureRegistry;
 
 /**
  * Test FeatureRegistry class.
@@ -30,7 +33,7 @@ class FeatureRegistryTest extends \PHPUnit_Framework_TestCase
      */
     public function testAdd()
     {
-        $Feature = new Feature\BooleanFeature('Test Feature');
+        $Feature = new BooleanFeature('Test Feature');
         FeatureRegistry::add('Test Feature', $Feature);
 
         $expected = $Feature;
@@ -46,7 +49,7 @@ class FeatureRegistryTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddThrowsException()
     {
-        $Feature = new Feature\BooleanFeature('Test Feature');
+        $Feature = new BooleanFeature('Test Feature');
         FeatureRegistry::add('Test Feature', $Feature);
         FeatureRegistry::add('Test Feature', $Feature);
     }
@@ -56,7 +59,7 @@ class FeatureRegistryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCheck()
     {
-        $Feature = new Feature\BooleanFeature('Test Feature');
+        $Feature = new BooleanFeature('Test Feature');
         FeatureRegistry::add('Test Feature', $Feature);
 
         $this->assertTrue(FeatureRegistry::check('Test Feature'));
@@ -68,7 +71,7 @@ class FeatureRegistryTest extends \PHPUnit_Framework_TestCase
      */
     public function testFlush()
     {
-        $Feature = new Feature\BooleanFeature('Test Feature');
+        $Feature = new BooleanFeature('Test Feature');
         FeatureRegistry::add('Test Feature', $Feature);
 
         FeatureRegistry::flush();
@@ -83,7 +86,7 @@ class FeatureRegistryTest extends \PHPUnit_Framework_TestCase
      */
     public function testGet()
     {
-        $Feature = new Feature\BooleanFeature('Test Feature');
+        $Feature = new BooleanFeature('Test Feature');
         FeatureRegistry::add('Test Feature', $Feature);
 
         $expected = '\FeatureToggle\Feature\BooleanFeature';

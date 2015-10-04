@@ -10,4 +10,4 @@
  */
 
 $loader = require __DIR__ . "/../vendor/autoload.php";
-$loader->add('FeatureToggle\\', __DIR__);
+$loader->add('FeatureToggle\Tests', __DIR__);
