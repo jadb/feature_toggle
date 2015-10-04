@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace FeatureToggle;
+namespace FeatureToggle\Test\Strategy;
 
 use FeatureToggle\Feature\TestFeature;
 use FeatureToggle\Strategy\DateTimeStrategy;

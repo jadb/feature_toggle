@@ -11,6 +11,10 @@
 
 namespace FeatureToggle;
 
+use FeatureToggle\Exception\FeatureNotFoundException;
+use FeatureToggle\Storage\HashStorage;
+use FeatureToggle\Storage\StorageInterface;
+
 /**
  * Feature registry.
  *
@@ -19,27 +23,50 @@ namespace FeatureToggle;
  */
 class FeatureRegistry
 {
-    /**
-     * Features registry.
+
+   /**
+     * Storage.
      *
-     * @var array
+     * @var \FeatureToggle\Storage\StorageInterface
      */
-    protected static $features = array();
+    protected static $storage;
+
+    /**
+     * Storage setter.
+     *
+     * @param \FeatureToggle\Storage\StorageInterface $storage Storage.
+     */
+    public static function setStorage(StorageInterface $storage)
+    {
+        static::$storage = $storage;
+    }
+
+    /**
+     * Storage getter.
+     *
+     * @return \FeatureToggle\Storage\HashStorage|\FeatureToggle\Storage\StorageInterface
+     */
+    protected static function getStorage()
+    {
+        if (!$storage = static::$storage) {
+            $storage = new HashStorage();
+            static::setStorage($storage);
+        }
+
+        return $storage;
+    }
 
     /**
      * Adds feature to registry.
      *
      * @param string $name Feature's name.
      * @param Feature\FeatureInterface $Feature Feature object to add.
-     * @throws \InvalidArgumentException If feature's name already exists in registry.
+     * @throws \FeatureToggle\Exception\DuplicateFeatureException If feature's name already
+     *   exists in registry.
      */
     public static function add($name, Feature\FeatureInterface $Feature)
     {
-        if (self::check($name)) {
-            throw new \InvalidArgumentException('Duplicate feature identifier.');
-        }
-
-        self::$features[$name] = $Feature;
+        static::getStorage()->add($name, $Feature);
     }
 
     /**
@@ -50,7 +77,12 @@ class FeatureRegistry
      */
     public static function check($name)
     {
-        return array_key_exists($name, self::$features);
+        try {
+            static::getStorage()->get($name);
+            return true;
+        } catch (FeatureNotFoundException $e) {
+            return false;
+        }
     }
 
     /**
@@ -60,7 +92,7 @@ class FeatureRegistry
      */
     public static function flush()
     {
-        self::$features = array();
+        static::getStorage()->flush();
     }
 
     /**
@@ -68,15 +100,12 @@ class FeatureRegistry
      *
      * @param string $name Feature's name.
      * @return Feature\FeatureInterface Feature object.
-     * @throws \InvalidArgumentException If feature's name does not exist in registry.
+     * @throws \FeatureToggle\Exception\FeatureNotFoundException If feature's name does not
+     *   exist in registry.
      */
     public static function get($name)
     {
-        if (!self::check($name)) {
-            throw new \InvalidArgumentException('Unknown feature identifier.');
-        }
-
-        return self::$features[$name];
+        return static::getStorage()->get($name);
     }
 
     /**
@@ -85,11 +114,14 @@ class FeatureRegistry
      * @param string $name Feature's name.
      * @param array $config Feature configuration.
      * @return Feature\FeatureInterface Feature object.
+     * @throws \FeatureToggle\Exception\DuplicateFeatureException If feature's name already
+     *   exists in registry.
      */
     public static function init($name, $config = array())
     {
         $FeatureBuilder = new FeatureBuilder();
-        self::add($name, $FeatureBuilder->createFeature($name, $config));
-        return self::get($name);
+        $feature = $FeatureBuilder->createFeature($name, $config);
+        static::getStorage()->add($name, $feature);
+        return $feature;
     }
 }

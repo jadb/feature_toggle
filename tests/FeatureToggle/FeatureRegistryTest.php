@@ -9,7 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace FeatureToggle;
+namespace FeatureToggle\Test;
+
+use FeatureToggle\Feature\BooleanFeature;
+use FeatureToggle\FeatureRegistry;
 
 /**
  * Test FeatureRegistry class.
@@ -30,7 +33,7 @@ class FeatureRegistryTest extends \PHPUnit_Framework_TestCase
      */
     public function testAdd()
     {
-        $Feature = new Feature\BooleanFeature('Test Feature');
+        $Feature = new BooleanFeature('Test Feature');
         FeatureRegistry::add('Test Feature', $Feature);
 
         $expected = $Feature;
@@ -41,12 +44,12 @@ class FeatureRegistryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers ::add
-     * @expectedException \InvalidArgumentException
+     * @expectedException \FeatureToggle\Exception\DuplicateFeatureException
      * @expectedExceptionMessage Duplicate feature identifier.
      */
     public function testAddThrowsException()
     {
-        $Feature = new Feature\BooleanFeature('Test Feature');
+        $Feature = new BooleanFeature('Test Feature');
         FeatureRegistry::add('Test Feature', $Feature);
         FeatureRegistry::add('Test Feature', $Feature);
     }
@@ -56,7 +59,7 @@ class FeatureRegistryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCheck()
     {
-        $Feature = new Feature\BooleanFeature('Test Feature');
+        $Feature = new BooleanFeature('Test Feature');
         FeatureRegistry::add('Test Feature', $Feature);
 
         $this->assertTrue(FeatureRegistry::check('Test Feature'));
@@ -68,12 +71,12 @@ class FeatureRegistryTest extends \PHPUnit_Framework_TestCase
      */
     public function testFlush()
     {
-        $Feature = new Feature\BooleanFeature('Test Feature');
+        $Feature = new BooleanFeature('Test Feature');
         FeatureRegistry::add('Test Feature', $Feature);
 
         FeatureRegistry::flush();
 
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->setExpectedException('\FeatureToggle\Exception\FeatureNotFoundException');
 
         FeatureRegistry::get('Test Feature');
     }
@@ -83,7 +86,7 @@ class FeatureRegistryTest extends \PHPUnit_Framework_TestCase
      */
     public function testGet()
     {
-        $Feature = new Feature\BooleanFeature('Test Feature');
+        $Feature = new BooleanFeature('Test Feature');
         FeatureRegistry::add('Test Feature', $Feature);
 
         $expected = '\FeatureToggle\Feature\BooleanFeature';
@@ -94,7 +97,7 @@ class FeatureRegistryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers ::get
-     * @expectedException \InvalidArgumentException
+     * @expectedException \FeatureToggle\Exception\FeatureNotFoundException
      * @expectedExceptionMessage Unknown feature identifier.
      */
     public function testGetThrowsException()

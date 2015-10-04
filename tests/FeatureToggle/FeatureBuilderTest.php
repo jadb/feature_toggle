@@ -9,11 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace FeatureToggle;
+namespace FeatureToggle\Test;
 
 use FeatureToggle\Feature\BooleanFeature;
 use FeatureToggle\Feature\TestFeature;
-use FeatureToggle\Feature\AbstractFeature;
+use FeatureToggle\FeatureBuilder;
 use FeatureToggle\Strategy\TestStrategy;
 
 /**

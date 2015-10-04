@@ -50,32 +50,35 @@ In your application's bootstrap:
 
 ```php
 use FeatureToggle\FeatureRegistry;
+use Predis\Client as Redis;
+
+FeatureRegistry::setStorage(new Redis());
 
 FeatureRegistry::init('Cool Feature', [
-	'description' => 'A cool new feature!',
-	'strategies' => [
-		'UserAgent' => [['/opera/', '/Mozilla\/5\.0/']],
-		function ($Feature) {
-			return !empty($_SESSION['isAdmin']);
-		},
-		function ($Feature) {
-			return !empty($_SESSION[$Feature->getName()]);
-		}
-	]
+    'description' => 'A cool new feature!',
+    'strategies' => [
+        'UserAgent' => [['/opera/', '/Mozilla\/5\.0/']],
+        function ($Feature) {
+            return !empty($_SESSION['isAdmin']);
+        },
+        function ($Feature) {
+            return !empty($_SESSION[$Feature->getName()]);
+        }
+    ]
 ]);
 
 FeatureRegistry::init('Another Cool Feature', [
-	'type' => 'threshold', // use the `ThresholdFeature`
-	'description' => 'Another cool new feature!',
-	'strategies' => [
-		'UserAgent' => [['/opera/', '/Mozilla\/5\.0/']],
-		function ($Feature) {
-			return !empty($_SESSION['isAdmin']);
-		},
-		function ($Feature) {
-			return !empty($_SESSION[$Feature->getName()]);
-		}
-	]
+    'type' => 'threshold', // use the `ThresholdFeature`
+    'description' => 'Another cool new feature!',
+    'strategies' => [
+        'UserAgent' => [['/opera/', '/Mozilla\/5\.0/']],
+        function ($Feature) {
+            return !empty($_SESSION['isAdmin']);
+        },
+        function ($Feature) {
+            return !empty($_SESSION[$Feature->getName()]);
+        }
+    ]
 ])->threshold(2); // Require at least 2 strategies to pass
 ```
 
@@ -83,7 +86,7 @@ and then, anywhere in your code, you can check this feature's status like so:
 
 ```php
 if (\FeatureToggle\FeatureManager::isEnabled('Cool Feature')) {
-	// do something
+    // do something
 }
 ```
 
@@ -107,10 +110,17 @@ Features __MUST__ implement the `FeatureInterface`.
 
 Strategies __MUST__ implement the `StrategyInterface`.
 
+### Storage Adapters
+
+* __HashStorage__: Default. Basic associative array (a.k.a. in memory).
+* __FileStorage__: Filesystem used (only good if you have store your features in database).
+* __MemcachedStorage__: Memcached store, equires the [`Memcached`][memcached] extension.
+* __RedisStorage__: Redis store, requires the [`predis/predis`][predis] package.
+
 ## Todo
 
 * ~~Enable feature only when {n} (or all) strategies pass~~
-* `RedisStorage` to keep track of features
+* ~~`RedisStorage` to keep track of features~~
 * `PercentageStrategy` enable feature to a percentage of users - requires `RedisStorage`
 * Option to automatically disable a feature if error threshold reached - requires `RedisStorage`
 
@@ -129,7 +139,7 @@ http://github.com/jadb/feature_toggle/issues
 
 ## License
 
-Copyright (c) 2014, [Jad Bitar][jadbio]
+Copyright (c) 2015, [Jad Bitar][jadbio]
 
 Licensed under the [BSD 3-Clause License][bsd3clause].
 
@@ -138,3 +148,5 @@ Redistributions of files must retain the above copyright notice.
 [jadbio]:http://jadb.io
 [bsd3clause]:http://opensource.org/licenses/BSD-3-Clause
 [composer]:http://getcomposer.org
+[memcached]:http://php.net/manual/en/book.memcached.php
+[predis]:http://packagist.org/predis/predis
