@@ -11,6 +11,7 @@
 
 namespace FeatureToggle;
 
+use FeatureToggle\Exception\FeatureNotFoundException;
 use FeatureToggle\Storage\HashStorage;
 use FeatureToggle\Storage\StorageInterface;
 
@@ -60,7 +61,8 @@ class FeatureRegistry
      *
      * @param string $name Feature's name.
      * @param Feature\FeatureInterface $Feature Feature object to add.
-     * @throws \InvalidArgumentException If feature's name already exists in registry.
+     * @throws \FeatureToggle\Exception\DuplicateFeatureException If feature's name already
+     *   exists in registry.
      */
     public static function add($name, Feature\FeatureInterface $Feature)
     {
@@ -78,7 +80,7 @@ class FeatureRegistry
         try {
             static::getStorage()->get($name);
             return true;
-        } catch (\InvalidArgumentException $e) {
+        } catch (FeatureNotFoundException $e) {
             return false;
         }
     }
@@ -98,7 +100,8 @@ class FeatureRegistry
      *
      * @param string $name Feature's name.
      * @return Feature\FeatureInterface Feature object.
-     * @throws \InvalidArgumentException If feature's name does not exist in registry.
+     * @throws \FeatureToggle\Exception\FeatureNotFoundException If feature's name does not
+     *   exist in registry.
      */
     public static function get($name)
     {
@@ -111,6 +114,8 @@ class FeatureRegistry
      * @param string $name Feature's name.
      * @param array $config Feature configuration.
      * @return Feature\FeatureInterface Feature object.
+     * @throws \FeatureToggle\Exception\DuplicateFeatureException If feature's name already
+     *   exists in registry.
      */
     public static function init($name, $config = array())
     {

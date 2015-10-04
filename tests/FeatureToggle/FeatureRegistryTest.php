@@ -41,7 +41,7 @@ class FeatureRegistryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers ::add
-     * @expectedException \InvalidArgumentException
+     * @expectedException \FeatureToggle\Exception\DuplicateFeatureException
      * @expectedExceptionMessage Duplicate feature identifier.
      */
     public function testAddThrowsException()
@@ -73,7 +73,7 @@ class FeatureRegistryTest extends \PHPUnit_Framework_TestCase
 
         FeatureRegistry::flush();
 
-        $this->setExpectedException('\InvalidArgumentException');
+        $this->setExpectedException('\FeatureToggle\Exception\FeatureNotFoundException');
 
         FeatureRegistry::get('Test Feature');
     }
@@ -94,7 +94,7 @@ class FeatureRegistryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers ::get
-     * @expectedException \InvalidArgumentException
+     * @expectedException \FeatureToggle\Exception\FeatureNotFoundException
      * @expectedExceptionMessage Unknown feature identifier.
      */
     public function testGetThrowsException()

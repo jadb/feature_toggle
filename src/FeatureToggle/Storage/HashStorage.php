@@ -1,6 +1,8 @@
 <?php
 namespace FeatureToggle\Storage;
 
+use FeatureToggle\Exception\DuplicateFeatureException;
+use FeatureToggle\Exception\FeatureNotFoundException;
 use FeatureToggle\Feature\FeatureInterface;
 
 class HashStorage implements StorageInterface
@@ -15,7 +17,7 @@ class HashStorage implements StorageInterface
     public function get($alias)
     {
         if (!array_key_exists($alias, $this->features)) {
-            throw new \InvalidArgumentException('Unknown feature identifier.');
+            throw new FeatureNotFoundException();
         }
 
         return $this->features[$alias];
@@ -24,7 +26,7 @@ class HashStorage implements StorageInterface
     public function add($alias, FeatureInterface $feature)
     {
         if (array_key_exists($alias, $this->features)) {
-            throw new \InvalidArgumentException('Duplicate feature identifier.');
+            throw new DuplicateFeatureException();
         }
 
         $this->features[$alias] = $feature;
@@ -34,7 +36,7 @@ class HashStorage implements StorageInterface
     public function remove($alias)
     {
         if (!array_key_exists($alias, $this->features)) {
-            throw new \InvalidArgumentException('Unknown feature identifier.');
+            throw new FeatureNotFoundException();
         }
 
         unset($this->features[$alias]);
