@@ -35,11 +35,11 @@ class FeatureRegistry
      */
     public static function add($name, Feature\FeatureInterface $Feature)
     {
-        if (self::check($name)) {
+        if (static::check($name)) {
             throw new \InvalidArgumentException('Duplicate feature identifier.');
         }
 
-        self::$features[$name] = $Feature;
+        static::$features[$name] = $Feature;
     }
 
     /**
@@ -50,7 +50,7 @@ class FeatureRegistry
      */
     public static function check($name)
     {
-        return array_key_exists($name, self::$features);
+        return array_key_exists($name, static::$features);
     }
 
     /**
@@ -60,7 +60,7 @@ class FeatureRegistry
      */
     public static function flush()
     {
-        self::$features = array();
+        static::$features = array();
     }
 
     /**
@@ -72,11 +72,11 @@ class FeatureRegistry
      */
     public static function get($name)
     {
-        if (!self::check($name)) {
+        if (!static::check($name)) {
             throw new \InvalidArgumentException('Unknown feature identifier.');
         }
 
-        return self::$features[$name];
+        return static::$features[$name];
     }
 
     /**
@@ -89,7 +89,7 @@ class FeatureRegistry
     public static function init($name, $config = array())
     {
         $FeatureBuilder = new FeatureBuilder();
-        self::add($name, $FeatureBuilder->createFeature($name, $config));
-        return self::get($name);
+        static::add($name, $FeatureBuilder->createFeature($name, $config));
+        return static::get($name);
     }
 }
