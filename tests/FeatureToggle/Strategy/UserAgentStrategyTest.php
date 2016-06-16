@@ -35,7 +35,6 @@ class UserAgentStrategyTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @covers ::__invoke
      */
     public function itShouldNotMatchAnyPattern()
     {
