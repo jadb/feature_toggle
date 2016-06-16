@@ -12,6 +12,7 @@
 namespace FeatureToggle;
 
 use FeatureToggle\Feature\FeatureInterface;
+use InvalidArgumentException;
 
 /**
  * Feature registry.
@@ -38,10 +39,10 @@ class FeatureRegistry
     public static function add(string $name, FeatureInterface $Feature)
     {
         if (self::check($name)) {
-            throw new \InvalidArgumentException('Duplicate feature identifier.');
+            throw new InvalidArgumentException('Duplicate feature identifier.');
         }
 
-        self::$features[$name] = $Feature;
+        self::$features[$name] = clone($Feature);
     }
 
     /**
@@ -75,10 +76,10 @@ class FeatureRegistry
     public static function get(string $name): FeatureInterface
     {
         if (!self::check($name)) {
-            throw new \InvalidArgumentException('Unknown feature identifier.');
+            throw new InvalidArgumentException('Unknown feature identifier.');
         }
 
-        return self::$features[$name];
+        return clone(self::$features[$name]);
     }
 
     /**
@@ -90,8 +91,8 @@ class FeatureRegistry
      */
     public static function init(string $name, array $config = []): FeatureInterface
     {
-        $FeatureBuilder = new FeatureBuilder();
-        self::add($name, $FeatureBuilder->createFeature($name, $config));
-        return self::get($name);
+        $feature = FeatureFactory::buildFeature($name, $config);
+        self::add($name, $feature);
+        return $feature;
     }
 }
