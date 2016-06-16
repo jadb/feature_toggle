@@ -1,7 +1,14 @@
 {
     "name": "jadb/feature_toggle",
-    "description": "",
-    "keywords": ["continuous integration", "feature toggle", "feature toggling"],
+    "description": "Feature Flip, Feature Flag, Feature Switch",
+    "keywords": [
+        "continuous integration",
+        "feature toggle",
+        "feature toggling",
+        "feature flag",
+        "feature switch",
+        "feature flip"
+    ],
     "homepage": "http://github.com/jadb/feature_toggle",
     "type": "library",
     "license": "MIT",
