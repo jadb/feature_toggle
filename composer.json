@@ -1,7 +1,6 @@
 {
     "name": "jadb/feature_toggle",
     "description": "",
-    "version": "0.0.2",
     "keywords": ["continuous integration", "feature toggle", "feature toggling"],
     "homepage": "http://github.com/jadb/feature_toggle",
     "type": "library",
@@ -29,6 +28,13 @@
         "phpunit/phpunit": "4.1.*"
     },
     "autoload": {
-        "psr-0": {"FeatureToggle": "src/"}
+        "psr-4": {
+            "FeatureToggle\\": "src"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
     }
 }
