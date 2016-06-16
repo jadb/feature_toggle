@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the FeatureToggle package.
@@ -9,35 +9,24 @@
  * file that was distributed with this source code.
  */
 
-namespace FeatureToggle;
+namespace FeatureToggle\Test;
 
-/**
- * Test FeatureManager class.
- *
- * @package FeatureToggle
- * @author Jad Bitar <jadbitar@mac.com>
- * @coversDefaultClass \FeatureToggle\FeatureManager
- */
+use FeatureToggle\Feature\DisabledFeature;
+use FeatureToggle\Feature\EnabledFeature;
+use FeatureToggle\FeatureManager;
+use FeatureToggle\FeatureRegistry;
+
 class FeatureManagerTest extends \PHPUnit_Framework_TestCase
 {
+
     /**
-     * @covers ::isEnabled
+     * @test
      */
-    public function testIsEnabled()
+    public function itShouldLocateAndDelegate()
     {
-        $FeatureMock = $this->getMock(
-            '\FeatureToggle\Feature\BooleanFeature',
-            array('isEnabled'),
-            array('bar')
-        );
-
-        $FeatureMock->expects($this->once())
-            ->method('isEnabled')
-            ->with()
-            ->will($this->returnValue(false));
-
-        FeatureRegistry::add('bar', $FeatureMock);
-
+        FeatureRegistry::add('foo', new EnabledFeature());
+        FeatureRegistry::add('bar', new DisabledFeature());
+        $this->assertTrue(FeatureManager::isEnabled('foo'));
         $this->assertFalse(FeatureManager::isEnabled('bar'));
     }
 }
