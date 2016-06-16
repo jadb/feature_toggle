@@ -13,10 +13,6 @@ namespace FeatureToggle\Feature;
 
 /**
  * Feature interface.
- *
- * @package FeatureToggle
- * @subpackage FeatureToggle.Feature
- * @author Jad Bitar <jadbitar@mac.com>
  */
 interface FeatureInterface
 {
@@ -43,24 +39,33 @@ interface FeatureInterface
     public function isEnabled(array $args = []): bool;
 
     /**
-     * Sets the feature's descriptions.
+     * Sets new description to a clone of the feature and returns that instance.
      *
      * @param string $description Feature's description.
-     * @return void
+     * @return \FeatureToggle\Feature\FeatureInterface
      */
-    public function setDescription(string $description);
+    public function setDescription(string $description): FeatureInterface;
 
     /**
-     * Sets the feature's name.
+     * Sets new name to a clone of the feature and returns that instance.
      *
      * @param string $name Feature's name.
-     * @return void
+     * @return \FeatureToggle\Feature\FeatureInterface
      */
-    public function setName(string $name);
+    public function setName(string $name): FeatureInterface;
 
     /**
-     * @param callable $strategy
-     * @return void
+     * Pushes new strategy to clone of the feature and returns that instance.
+     *
+     * @param \FeatureToggle\Strategy\StrategyInterface|callable $strategy
+     * @return \FeatureToggle\Feature\FeatureInterface
      */
-    public function pushStrategy(callable $strategy);
+    public function pushStrategy(callable $strategy): FeatureInterface;
+
+    /**
+     * Returns list of defined strategies for this feature's instance.
+     *
+     * @return array
+     */
+    public function getStrategies(): array;
 }

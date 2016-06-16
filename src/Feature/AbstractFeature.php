@@ -13,10 +13,6 @@ namespace FeatureToggle\Feature;
 
 /**
  * Abstract feature.
- *
- * @package FeatureToggle
- * @subpackage FeatureToggle.Feature
- * @author Jad Bitar <jadbitar@mac.com>
  */
 abstract class AbstractFeature implements FeatureInterface
 {
@@ -25,14 +21,14 @@ abstract class AbstractFeature implements FeatureInterface
      *
      * @var string
      */
-    protected $description;
+    private $description;
 
     /**
      * Feature's name.
      *
      * @var string
      */
-    protected $name;
+    private $name;
 
     /**
      * Strategies' stack.
@@ -45,18 +41,18 @@ abstract class AbstractFeature implements FeatureInterface
      * Constructor.
      *
      * @param string $name Feature's name.
-     * @param string $description Feature's description.
+     * @param string|null $description Feature's description.
      */
-    public function __construct(string $name = null, string $description = null)
+    public function __construct(string $name, string $description = null)
     {
-        $this->setName($name);
-        $this->setDescription($description);
+        $this->name = $name;
+        $this->description = $description;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getDescription(): string
+    final public function getDescription(): string
     {
         return $this->description;
     }
@@ -64,7 +60,7 @@ abstract class AbstractFeature implements FeatureInterface
     /**
      * {@inheritdoc}
      */
-    public function getName(): string
+    final public function getName(): string
     {
         return $this->name;
     }
@@ -74,43 +70,38 @@ abstract class AbstractFeature implements FeatureInterface
      *
      * @return array
      */
-    public function getStrategies(): array
+    final public function getStrategies(): array
     {
         return $this->strategies;
     }
 
     /**
-     * Adds strategy to defined strategies' stack.
-     *
-     * @param callable $callback Any callable.
-     * @return void
+     * {@inheritdoc}
      */
-    public function pushStrategy(callable $callback)
+    final public function pushStrategy(callable $strategy): FeatureInterface
     {
-        if (!is_callable($callback)) {
-            throw new  \InvalidArgumentException(
-                'Strategy must be callable (callback or object with an __invoke method), '
-                . var_export($callback, true)
-                . ' given.'
-            );
-        }
-
-        array_push($this->strategies, $callback);
+        $feature = clone($this);
+        array_push($feature->strategies, $strategy);
+        return $feature;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setDescription(string $description)
+    final public function setDescription(string $description): FeatureInterface
     {
-        $this->description = $description;
+        $feature = clone($this);
+        $feature->description = $description;
+        return $feature;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setName(string $name)
+    final public function setName(string $name): FeatureInterface
     {
-        $this->name = $name;
+        $feature = clone($this);
+        $feature->name = $name;
+        return $feature;
     }
 }
