@@ -12,6 +12,8 @@
 namespace FeatureToggle;
 
 use FeatureToggle\Feature\FeatureInterface;
+use FeatureToggle\Storage\HashStorage;
+use FeatureToggle\Storage\StorageInterface;
 use InvalidArgumentException;
 
 /**
@@ -22,27 +24,28 @@ use InvalidArgumentException;
  */
 class FeatureRegistry
 {
-    /**
-     * Features registry.
-     *
-     * @var array
-     */
-    protected static $features = [];
+    private static $storage;
+
+    public static function setStorage(StorageInterface $storage)
+    {
+        static::$storage = $storage;
+    }
+
+    private static function getStorage(): StorageInterface
+    {
+        return static::$storage = static::$storage ?: new HashStorage();
+    }
 
     /**
      * Adds feature to registry.
      *
      * @param string $name Feature's name.
-     * @param \FeatureToggle\Feature\FeatureInterface $Feature Feature object to add.
+     * @param \FeatureToggle\Feature\FeatureInterface $feature Feature object to add.
      * @throws \InvalidArgumentException If feature's name already exists in registry.
      */
-    public static function add(string $name, FeatureInterface $Feature)
+    public static function add(string $name, FeatureInterface $feature)
     {
-        if (static::check($name)) {
-            throw new InvalidArgumentException('Duplicate feature identifier.');
-        }
-
-        static::$features[$name] = clone($Feature);
+        static::getStorage()->add($name, clone($feature));
     }
 
     /**
@@ -51,9 +54,14 @@ class FeatureRegistry
      * @param string $name Feature's name.
      * @return boolean
      */
-    public static function check($name): bool
+    public static function check(string $name): bool
     {
-        return array_key_exists($name, static::$features);
+        try {
+            static::getStorage()->get($name);
+            return true;
+        } catch (InvalidArgumentException $e) {
+            return false;
+        }
     }
 
     /**
@@ -63,7 +71,7 @@ class FeatureRegistry
      */
     public static function flush()
     {
-        static::$features = [];
+        static::getStorage()->flush();
     }
 
     /**
@@ -75,11 +83,7 @@ class FeatureRegistry
      */
     public static function get(string $name): FeatureInterface
     {
-        if (!static::check($name)) {
-            throw new InvalidArgumentException('Unknown feature identifier.');
-        }
-
-        return clone(static::$features[$name]);
+        return clone(static::getStorage()->get($name));
     }
 
     /**

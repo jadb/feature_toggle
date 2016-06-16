@@ -11,14 +11,49 @@
 
 namespace FeatureToggle\Storage;
 
+use FeatureToggle\Feature\FeatureInterface;
+
 /**
  * Storage interface.
- *
- * @package FeatureToggle
- * @subpackage FeatureToggle.Storage
- * @author Jad Bitar <jadbitar@mac.com>
  */
 interface StorageInterface
 {
-    // Stub
+    /**
+     * Lists all toggles in storage.
+     *
+     * @return \FeatureToggle\Feature\FeatureInterface[]
+     */
+    public function index(): array;
+
+    /**
+     * Returns requested toggle from storage.
+     *
+     * @param string $alias Toggle's name.
+     * @return \FeatureToggle\Feature\FeatureInterface
+     */
+    public function get(string $alias): FeatureInterface;
+
+    /**
+     * Stores a new toggle.
+     *
+     * @param string $alias Toggle's name.
+     * @param \FeatureToggle\Feature\FeatureInterface $feature
+     * @return \FeatureToggle\Storage\StorageInterface
+     */
+    public function add(string $alias, FeatureInterface $feature): StorageInterface;
+
+    /**
+     * Deletes toggle from storage.
+     *
+     * @param string $alias Toggle's name.
+     * @return \FeatureToggle\Storage\StorageInterface
+     */
+    public function remove(string $alias): StorageInterface;
+
+    /**
+     * Deletes all defined toggles from storage.
+     *
+     * @return \FeatureToggle\Storage\StorageInterface
+     */
+    public function flush(): StorageInterface;
 }
