@@ -19,7 +19,7 @@ use FeatureToggle\Feature\FeatureInterface;
  * @package FeatureToggle
  * @author Jad Bitar <jadbitar@mac.com>
  */
-class FeatureBuilder
+class FeatureFactory
 {
 
     /**

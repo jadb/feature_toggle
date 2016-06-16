@@ -9,5 +9,6 @@
  * file that was distributed with this source code.
  */
 
-$loader = require __DIR__ . "/../vendor/autoload.php";
-$loader->add('FeatureToggle\\', __DIR__);
+require dirname(__DIR__) . '/vendor/autoload.php';
+require __DIR__ . '/Fixture/stubs.php';
+

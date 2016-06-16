@@ -9,22 +9,16 @@
  * file that was distributed with this source code.
  */
 
-namespace FeatureToggle;
+namespace FeatureToggle\Test;
 
 use FeatureToggle\Feature\BooleanFeature;
 use FeatureToggle\Feature\FeatureInterface;
+use FeatureToggle\FeatureFactory;
 use FeatureToggle\Strategy\AbstractStrategy;
 use FeatureToggle\Strategy\DateTimeStrategy;
 use FeatureToggle\Stub\ForTestingItShouldPushAnyCallableStrategy;
 
-/**
- * Test FeatureBuilder class.
- *
- * @package FeatureToggle
- * @author Jad Bitar <jadbitar@mac.com>
- * @coversDefaultClass \FeatureToggle\FeatureBuilder
- */
-class FeatureBuilderTest extends \PHPUnit_Framework_TestCase
+class FeatureFactoryTest extends \PHPUnit_Framework_TestCase
 {
 
     /**
@@ -32,7 +26,7 @@ class FeatureBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldDefaultToBooleanFeature()
     {
-        $result = FeatureBuilder::buildFeature('Test');
+        $result = FeatureFactory::buildFeature('Test');
         $this->assertInstanceOf(BooleanFeature::class, $result);
     }
 
@@ -74,7 +68,7 @@ class FeatureBuilderTest extends \PHPUnit_Framework_TestCase
             $strategy,
         ];
 
-        $feature = FeatureBuilder::buildFeature('Test', compact('type', 'strategies'));
+        $feature = FeatureFactory::buildFeature('Test', compact('type', 'strategies'));
         $this->assertCount(7, $feature->getStrategies());
     }
 
