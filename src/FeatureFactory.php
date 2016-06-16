@@ -45,7 +45,8 @@ class FeatureFactory
         $feature = new $classname($name, $description);
 
         foreach ((array)$strategies as $class => $args) {
-            $feature = $feature->pushStrategy(is_numeric($class)
+            $feature = $feature->pushStrategy(
+                is_numeric($class)
                 ? $args
                 : new $class(...$args)
             );

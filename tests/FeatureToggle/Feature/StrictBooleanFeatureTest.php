@@ -45,6 +45,7 @@ class StrictBooleanFeatureTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->feature->isEnabled());
         $this->assertTrue($result->isEnabled());
 
+        // @codingStandardsIgnoreStart
         $strategy1 = new class extends AbstractStrategy {
             public function __invoke(FeatureInterface $Feature, array $args = []): bool
             {
@@ -58,6 +59,7 @@ class StrictBooleanFeatureTest extends \PHPUnit_Framework_TestCase
                 return true;
             }
         };
+        // @codingStandardsIgnoreEnd
 
         $result = $this->feature
             ->pushStrategy($strategy1)
@@ -71,7 +73,7 @@ class StrictBooleanFeatureTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldBeConsideredDisabledWhenJustOneStrategyFails()
     {
-
+        // @codingStandardsIgnoreStart
         $strategy1 = new class extends AbstractStrategy {
             public function __invoke(FeatureInterface $Feature, array $args = []): bool
             {
@@ -85,6 +87,7 @@ class StrictBooleanFeatureTest extends \PHPUnit_Framework_TestCase
                 return false;
             }
         };
+        // @codingStandardsIgnoreEnd
 
         $result = $this->feature
             ->pushStrategy($strategy1)

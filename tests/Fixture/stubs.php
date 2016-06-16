@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 
 namespace FeatureToggle\Stub {
+
     function forTestingItShouldPushAnyCallableStrategy()
     {
         return true;

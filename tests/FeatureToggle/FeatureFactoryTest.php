@@ -41,11 +41,17 @@ class FeatureFactoryTest extends \PHPUnit_Framework_TestCase
             return current($args);
         };
 
-        $anonymousMethod = [new class {
-            public function foo(FeatureInterface $feature, array $args = []) {
-                return current($args);
-            }
-        }, 'foo'];
+        // @codingStandardsIgnoreStart
+        $anonymousMethod = [
+            new class
+            {
+                public function foo(FeatureInterface $feature, array $args = [])
+                {
+                    return current($args);
+                }
+            },
+            'foo'
+        ];
 
         $anonymousStrategy = new class extends AbstractStrategy {
             public function __invoke(FeatureInterface $feature, array $args = []): bool
@@ -53,6 +59,7 @@ class FeatureFactoryTest extends \PHPUnit_Framework_TestCase
                 return current($args);
             }
         };
+        // @codingStandardsIgnoreEnd
 
         $function = '\FeatureToggle\Stub\forTestingItShouldPushAnyCallableStrategy';
         $method = [$this, 'forTestingItShouldPushAnyCallableStrategy'];
@@ -74,7 +81,8 @@ class FeatureFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(7, $feature->getStrategies());
     }
 
-    public function forTestingItShouldPushAnyCallableStrategy() {
+    public function forTestingItShouldPushAnyCallableStrategy()
+    {
         return true;
     }
 }

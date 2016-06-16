@@ -44,9 +44,7 @@ final class DateTimeStrategy extends AbstractStrategy
      * @param \FeatureToggle\Strategy\ComparisonOperator\ComparisonOperatorInterface $comparator
      *   Comparison operator.
      */
-    public function __construct(
-        DateTime $reference, 
-        ComparisonOperatorInterface $comparator = null)
+    public function __construct(DateTime $reference, ComparisonOperatorInterface $comparator = null)
     {
         $this->reference = $reference;
         $this->comparator = $comparator ?: new GreaterThanEqual();
