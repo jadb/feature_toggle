@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the FeatureToggle package.
@@ -10,6 +10,8 @@
  */
 
 namespace FeatureToggle\Strategy;
+
+use FeatureToggle\Feature\FeatureInterface;
 
 /**
  * Strategy interface.
@@ -23,15 +25,16 @@ interface StrategyInterface
     /**
      * Tells if strategy passes or not.
      *
-     * @param FeatureInterface $Feature
+     * @param \FeatureToggle\Feature\FeatureInterface $Feature
+     * @param array $args
      * @return boolean
      */
-    public function __invoke($Feature, array $args = []);
+    public function __invoke(FeatureInterface $Feature, array $args = []): bool;
 
     /**
      * Returns strategy's name.
      *
      * @return string
      */
-    public function getName();
+    public function getName(): string;
 }

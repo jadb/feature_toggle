@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the FeatureToggle package.
@@ -10,6 +10,8 @@
  */
 
 namespace FeatureToggle;
+
+use FeatureToggle\Feature\FeatureInterface;
 
 /**
  * Feature registry.
@@ -24,16 +26,16 @@ class FeatureRegistry
      *
      * @var array
      */
-    protected static $features = array();
+    protected static $features = [];
 
     /**
      * Adds feature to registry.
      *
      * @param string $name Feature's name.
-     * @param Feature\FeatureInterface $Feature Feature object to add.
+     * @param \FeatureToggle\Feature\FeatureInterface $Feature Feature object to add.
      * @throws \InvalidArgumentException If feature's name already exists in registry.
      */
-    public static function add($name, Feature\FeatureInterface $Feature)
+    public static function add(string $name, FeatureInterface $Feature)
     {
         if (self::check($name)) {
             throw new \InvalidArgumentException('Duplicate feature identifier.');
@@ -48,7 +50,7 @@ class FeatureRegistry
      * @param string $name Feature's name.
      * @return boolean
      */
-    public static function check($name)
+    public static function check($name): bool
     {
         return array_key_exists($name, self::$features);
     }
@@ -60,17 +62,17 @@ class FeatureRegistry
      */
     public static function flush()
     {
-        self::$features = array();
+        self::$features = [];
     }
 
     /**
      * Returns feature from registry.
      *
      * @param string $name Feature's name.
-     * @return Feature\FeatureInterface Feature object.
+     * @return \FeatureToggle\Feature\FeatureInterface Feature object.
      * @throws \InvalidArgumentException If feature's name does not exist in registry.
      */
-    public static function get($name)
+    public static function get(string $name): FeatureInterface
     {
         if (!self::check($name)) {
             throw new \InvalidArgumentException('Unknown feature identifier.');
@@ -84,9 +86,9 @@ class FeatureRegistry
      *
      * @param string $name Feature's name.
      * @param array $config Feature configuration.
-     * @return Feature\FeatureInterface Feature object.
+     * @return \FeatureToggle\Feature\FeatureInterface Feature object.
      */
-    public static function init($name, $config = array())
+    public static function init(string $name, array $config = []): FeatureInterface
     {
         $FeatureBuilder = new FeatureBuilder();
         self::add($name, $FeatureBuilder->createFeature($name, $config));

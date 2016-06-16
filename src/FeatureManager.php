@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the FeatureToggle package.
@@ -25,7 +25,7 @@ class FeatureManager
      * @param string $feature Feature's name.
      * @return boolean
      */
-    public static function isEnabled($feature, array $args = [])
+    public static function isEnabled(string $feature, array $args = []): bool
     {
         return FeatureRegistry::get($feature)->isEnabled($args);
     }

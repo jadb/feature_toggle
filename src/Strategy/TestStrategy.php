@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the FeatureToggle package.
@@ -10,6 +10,8 @@
  */
 
 namespace FeatureToggle\Strategy;
+
+use FeatureToggle\Feature\FeatureInterface;
 
 /**
  * Test strategy.
@@ -23,7 +25,7 @@ class TestStrategy extends AbstractStrategy
     /**
      * {@inheritdoc}
      */
-    public function __invoke($Feature, array $args = [])
+    public function __invoke(FeatureInterface $Feature, array $args = []): bool
     {
         return;
     }

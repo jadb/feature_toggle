@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the FeatureToggle package.
@@ -64,7 +64,7 @@ class BooleanFeature extends AbstractFeature
     /**
      * {@inheritdoc}
      */
-    public function isEnabled(array $args = [])
+    public function isEnabled(array $args = []): bool
     {
         return $this->check($args);
     }
@@ -72,9 +72,10 @@ class BooleanFeature extends AbstractFeature
     /**
      * Tells if feature is enabled.
      *
+     * @param array $args
      * @return bool
      */
-    protected function check(array $args)
+    protected function check(array $args = []): bool
     {
         $isEnabled = (int)$this->isEnabled;
         $strategies = $this->getStrategies();
@@ -83,7 +84,7 @@ class BooleanFeature extends AbstractFeature
         }
 
         foreach ($strategies as $strategy) {
-            if (call_user_func($strategy, $this, $args)) {
+            if ((bool)call_user_func($strategy, $this, $args)) {
                 $isEnabled++;
             }
         }

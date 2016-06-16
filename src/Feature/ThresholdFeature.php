@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the FeatureToggle package.
@@ -26,11 +26,11 @@ class ThresholdFeature extends BooleanFeature
      * @param int $val The minimum threshold for a feature to be considered enabled.
      * @return int The minimum threshold for a feature to be considered enabled.
      */
-    public function threshold($val = null)
+    public function threshold(int $val = null): int
     {
         if ($val !== null) {
             if (!is_int($val)) {
-                throw new InvalidArgumentException('Only integer allowed.');
+                throw new \InvalidArgumentException('Only integer allowed.');
             }
             $this->threshold = $val;
         }

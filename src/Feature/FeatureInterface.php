@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the FeatureToggle package.
@@ -25,21 +25,22 @@ interface FeatureInterface
      *
      * @return string
      */
-    public function getDescription();
+    public function getDescription(): string;
 
     /**
      * Returns the feature's name.
      *
      * @return string
      */
-    public function getName();
+    public function getName(): string;
 
     /**
      * Tells if feature is enabled.
      *
-     * @return mixed
+     * @param array $args
+     * @return bool
      */
-    public function isEnabled(array $args = []);
+    public function isEnabled(array $args = []): bool;
 
     /**
      * Sets the feature's descriptions.
@@ -47,7 +48,7 @@ interface FeatureInterface
      * @param string $description Feature's description.
      * @return void
      */
-    public function setDescription($description);
+    public function setDescription(string $description);
 
     /**
      * Sets the feature's name.
@@ -55,5 +56,5 @@ interface FeatureInterface
      * @param string $name Feature's name.
      * @return void
      */
-    public function setName($name);
+    public function setName(string $name);
 }

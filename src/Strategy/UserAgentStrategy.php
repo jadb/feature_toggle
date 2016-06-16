@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the FeatureToggle package.
@@ -10,6 +10,8 @@
  */
 
 namespace FeatureToggle\Strategy;
+
+use FeatureToggle\Feature\FeatureInterface;
 
 /**
  * User agent strategy.
@@ -30,9 +32,9 @@ class UserAgentStrategy extends AbstractStrategy
     /**
      * Constructor.
      *
-     * @param array $patterns Allowed user agents' patterns.
+     * @param string[] $patterns Allowed user agents' patterns.
      */
-    public function __construct($patterns)
+    public function __construct(array $patterns)
     {
         $this->patterns = $patterns;
     }
@@ -40,7 +42,7 @@ class UserAgentStrategy extends AbstractStrategy
     /**
      * {@inheritdoc}
      */
-    public function __invoke($Feature, array $args = [])
+    public function __invoke(FeatureInterface $Feature, array $args = []): bool
     {
         $userAgent = $this->getUserAgent();
 
@@ -58,7 +60,7 @@ class UserAgentStrategy extends AbstractStrategy
      *
      * @return string
      */
-    public function getUserAgent()
+    public function getUserAgent(): string
     {
         if (!array_key_exists('HTTP_USER_AGENT', $_SERVER)) {
             return '';

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the FeatureToggle package.
@@ -39,7 +39,7 @@ abstract class AbstractFeature implements FeatureInterface
      *
      * @var array
      */
-    private $strategies = array();
+    private $strategies = [];
 
     /**
      * Constructor.
@@ -47,7 +47,7 @@ abstract class AbstractFeature implements FeatureInterface
      * @param string $name Feature's name.
      * @param string $description Feature's description.
      */
-    public function __construct($name = null, $description = null)
+    public function __construct(string $name = null, string $description = null)
     {
         $this->setName($name);
         $this->setDescription($description);
@@ -56,7 +56,7 @@ abstract class AbstractFeature implements FeatureInterface
     /**
      * {@inheritdoc}
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         return $this->description;
     }
@@ -64,7 +64,7 @@ abstract class AbstractFeature implements FeatureInterface
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -74,7 +74,7 @@ abstract class AbstractFeature implements FeatureInterface
      *
      * @return array
      */
-    public function getStrategies()
+    public function getStrategies(): array
     {
         return $this->strategies;
     }
@@ -82,10 +82,10 @@ abstract class AbstractFeature implements FeatureInterface
     /**
      * Adds strategy to defined strategies' stack.
      *
-     * @param mixed $callback Closure or object with an `__invoke` method.
+     * @param callable $callback Any callable.
      * @return void
      */
-    public function pushStrategy($callback)
+    public function pushStrategy(callable $callback)
     {
         if (!is_callable($callback)) {
             throw new  \InvalidArgumentException(
@@ -101,7 +101,7 @@ abstract class AbstractFeature implements FeatureInterface
     /**
      * {@inheritdoc}
      */
-    public function setDescription($description)
+    public function setDescription(string $description)
     {
         $this->description = $description;
     }
@@ -109,7 +109,7 @@ abstract class AbstractFeature implements FeatureInterface
     /**
      * {@inheritdoc}
      */
-    public function setName($name)
+    public function setName(string $name)
     {
         $this->name = $name;
     }

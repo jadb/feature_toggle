@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the FeatureToggle package.
@@ -11,6 +11,8 @@
 
 namespace FeatureToggle\Strategy;
 
+use FeatureToggle\Feature\FeatureInterface;
+
 /**
  * DateTimeRange strategy.
  *
@@ -20,6 +22,12 @@ namespace FeatureToggle\Strategy;
  */
 class DateTimeRangeStrategy extends AbstractStrategy
 {
+
+    const COMPARATORS = [
+        'minRange' => '>',
+        'maxRange' => '<'
+    ];
+
     /**
      * Include start and end date time or not.
      *
@@ -48,7 +56,7 @@ class DateTimeRangeStrategy extends AbstractStrategy
      * @param string $maxRange Maximum date time.
      * @param boolean $inclusive Include minimum and maximum dates in range.
      */
-    public function __construct($minRange, $maxRange, $inclusive = false)
+    public function __construct(string $minRange, string $maxRange, bool $inclusive = false)
     {
         $this->inclusive = $inclusive;
         $this->maxRange = $maxRange;
@@ -58,12 +66,11 @@ class DateTimeRangeStrategy extends AbstractStrategy
     /**
      * {@inheritdoc}
      */
-    public function __invoke($Feature, array $args = [])
+    public function __invoke(FeatureInterface $Feature, array $args = []): bool
     {
-        $strategies = array();
-        $comparators = array('minRange' => '>', 'maxRange' => '<');
+        $strategies = [];
 
-        foreach ($comparators as $var => $comparator) {
+        foreach (static::COMPARATORS as $var => $comparator) {
             if ($this->inclusive) {
                 $comparator .= '=';
             }
@@ -80,7 +87,7 @@ class DateTimeRangeStrategy extends AbstractStrategy
         return $result;
     }
 
-    public function asDateTimeStrategy($datetime, $comparator)
+    public function asDateTimeStrategy(string $datetime, string $comparator): DateTimeStrategy
     {
         return new DateTimeStrategy($datetime, $comparator);
     }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the FeatureToggle package.
@@ -30,7 +30,7 @@ abstract class AbstractStrategy implements StrategyInterface
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         if (empty($this->name)) {
             $this->setName();
@@ -45,7 +45,7 @@ abstract class AbstractStrategy implements StrategyInterface
      * @param string $name Strategy's name.
      * @return void
      */
-    public function setName($name = null)
+    public function setName(string $name = null)
     {
         if (empty($name)) {
             $classname = explode('\\', get_class($this));
