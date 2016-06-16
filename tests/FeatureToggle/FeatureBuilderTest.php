@@ -12,9 +12,10 @@
 namespace FeatureToggle;
 
 use FeatureToggle\Feature\BooleanFeature;
-use FeatureToggle\Feature\TestFeature;
-use FeatureToggle\Feature\AbstractFeature;
-use FeatureToggle\Strategy\TestStrategy;
+use FeatureToggle\Feature\FeatureInterface;
+use FeatureToggle\Strategy\AbstractStrategy;
+use FeatureToggle\Strategy\DateTimeStrategy;
+use FeatureToggle\Stub\ForTestingItShouldPushAnyCallableStrategy;
 
 /**
  * Test FeatureBuilder class.
@@ -25,151 +26,59 @@ use FeatureToggle\Strategy\TestStrategy;
  */
 class FeatureBuilderTest extends \PHPUnit_Framework_TestCase
 {
+
     /**
-     * {@inheritdoc}
+     * @test
      */
-    public function setUp()
+    public function itShouldDefaultToBooleanFeature()
     {
-        $this->FeatureBuilder = new FeatureBuilder();
+        $result = FeatureBuilder::buildFeature('Test');
+        $this->assertInstanceOf(BooleanFeature::class, $result);
     }
 
     /**
-     * {@inheritdoc}
+     * @test
      */
-    public function tearDown()
+    public function itShouldPushAnyCallableStrategy()
     {
-        unset($this->FeatureBuilder);
-    }
-
-    /**
-     * @covers ::createFeature
-     */
-    public function testCreateFeature()
-    {
-        $expected = new BooleanFeature('Test Feature');
-        $actual = $this->FeatureBuilder->createFeature('Test Feature');
-
-        $this->assertEquals($expected, $actual);
-
-        $expected = new TestFeature('Test Feature');
-        $actual = $this->FeatureBuilder->createFeature('Test Feature', array('type' => 'test'));
-
-        $this->assertEquals($expected, $actual);
-    }
-
-    /**
-     * @covers ::addCallback
-     * @covers ::setFeature
-     */
-    public function testAddCallback()
-    {
-        $callback = function ($Feature) {
-            return;
+        $anonymousFunction = function (FeatureInterface $feature, array $args = []) {
+            return current($args);
         };
 
-        $FeatureMock = $this->getMock(
-            '\FeatureToggle\Feature\BooleanFeature',
-            array('pushStrategy'),
-            array('Test Feature')
-        );
+        $anonymousMethod = [new class {
+            public function foo(FeatureInterface $feature, array $args = []) {
+                return current($args);
+            }
+        }, 'foo'];
 
-        $FeatureMock->expects($this->once())
-            ->method('pushStrategy')
-            ->with($callback);
+        $anonymousStrategy = new class extends AbstractStrategy {
+            public function __invoke(FeatureInterface $feature, array $args = []): bool
+            {
+                return current($args);
+            }
+        };
 
-        $this->FeatureBuilder->setFeature($FeatureMock);
+        $function = '\FeatureToggle\Stub\forTestingItShouldPushAnyCallableStrategy';
+        $method = [$this, 'forTestingItShouldPushAnyCallableStrategy'];
+        $object = new ForTestingItShouldPushAnyCallableStrategy();
+        $strategy = new DateTimeStrategy(date('Y-m-d', strtotime('tomorrow')), '<');
 
-        $this->FeatureBuilder->addCallback($callback);
+        $type = 'strictBoolean';
+        $strategies = [
+            $anonymousFunction,
+            $anonymousMethod,
+            $anonymousStrategy,
+            $function,
+            $method,
+            $object,
+            $strategy,
+        ];
+
+        $feature = FeatureBuilder::buildFeature('Test', compact('type', 'strategies'));
+        $this->assertCount(7, $feature->getStrategies());
     }
 
-    /**
-     * @covers ::addCallback
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage
-     */
-    public function testAddCallbackThrowsException()
-    {
-        $this->FeatureBuilder->addCallback('string');
-    }
-
-    /**
-     * @covers ::addStrategies
-     */
-    public function testAddStrategies()
-    {
-        $FeatureBuilderMock = $this->getMock(
-            '\FeatureToggle\FeatureBuilder',
-            array('addCallback', 'addStrategy')
-        );
-
-        $strategies = array(
-            function ($Feature) {
-                return;
-            },
-            'Test' => array()
-        );
-
-        $FeatureBuilderMock->expects($this->once())->method('addCallback')->with($strategies[0]);
-        $FeatureBuilderMock->expects($this->once())->method('addStrategy')->with('Test', $strategies['Test']);
-
-        $FeatureBuilderMock->addStrategies($strategies);
-    }
-
-    /**
-     * @covers ::addStrategy
-     * @covers ::setFeature
-     */
-    public function testAddStrategy()
-    {
-        $FeatureMock = $this->getMock(
-            '\FeatureToggle\Feature\BooleanFeature',
-            array('pushStrategy'),
-            array('Test Feature')
-        );
-
-        $FeatureMock->expects($this->once())
-            ->method('pushStrategy')
-            ->with(new TestStrategy());
-
-        $this->FeatureBuilder->setFeature($FeatureMock);
-
-        $this->FeatureBuilder->addStrategy('Test', array());
-    }
-
-    /**
-     * @covers ::addStrategy
-     * @covers ::setFeature
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage
-     */
-    public function testAddStrategyThrowsExceptionMissingPushStrategyMethod()
-    {
-        $FeatureMock = $this->getMock('InexistentFeature');
-        $this->FeatureBuilder->setFeature($FeatureMock);
-        $this->FeatureBuilder->addStrategy('Test', array());
-    }
-
-    /**
-     * @covers ::addStrategy
-     * @covers ::setFeature
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage
-     */
-    public function testAddStrategyThrowsExceptionBadType()
-    {
-        $this->FeatureBuilder->setFeature(new BooleanFeature('foo'));
-        $this->FeatureBuilder->addStrategy(new TestStrategy(), array());
-    }
-
-    /**
-     * @covers ::addStrategy
-     * @covers ::setFeature
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage
-     */
-    public function testAddStrategyThrowsExceptionMissingClass()
-    {
-        $this->FeatureBuilder->setFeature(new BooleanFeature('foo'));
-        $this->FeatureBuilder->addStrategy('Inexistent', array());
+    public function forTestingItShouldPushAnyCallableStrategy() {
+        return true;
     }
 }
