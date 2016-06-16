@@ -33,7 +33,7 @@ In `composer.json`:
 ```json
 {
     "require": {
-        "jadb/feature_toggle": "*"
+        "jadb/feature_toggle": "^1.0"
     }
 }
 ```
@@ -109,7 +109,6 @@ Strategies __MUST__ implement the `StrategyInterface`.
 
 ## Todo
 
-* ~~Enable feature only when {n} (or all) strategies pass~~
 * `RedisStorage` to keep track of features
 * `PercentageStrategy` enable feature to a percentage of users - requires `RedisStorage`
 * Option to automatically disable a feature if error threshold reached - requires `RedisStorage`
