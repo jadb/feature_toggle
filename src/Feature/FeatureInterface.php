@@ -57,4 +57,10 @@ interface FeatureInterface
      * @return void
      */
     public function setName(string $name);
+
+    /**
+     * @param callable $strategy
+     * @return void
+     */
+    public function pushStrategy(callable $strategy);
 }
