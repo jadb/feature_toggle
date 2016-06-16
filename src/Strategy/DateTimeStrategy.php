@@ -11,41 +11,45 @@
 
 namespace FeatureToggle\Strategy;
 
+use DateTime;
 use FeatureToggle\Feature\FeatureInterface;
+use FeatureToggle\Strategy\ComparisonOperator\ComparisonOperatorInterface;
+use FeatureToggle\Strategy\ComparisonOperator\GreaterThanEqual;
+use InvalidArgumentException;
 
 /**
  * DateTime strategy.
- *
- * @package FeatureToggle
- * @subpackage FeatureToggle.Strategy
- * @author Jad Bitar <jadbitar@mac.com>
  */
-class DateTimeStrategy extends AbstractStrategy
+final class DateTimeStrategy extends AbstractStrategy
 {
+
     /**
      * Date time to use in comparison.
      *
      * @var string
      */
-    protected $datetime;
+    private $reference;
 
     /**
      * Comparison operator.
      *
      * @var string
      */
-    protected $comparator;
+    private $comparator;
 
     /**
      * Constructor.
      *
-     * @param string $datetime Date time to use in comparison.
-     * @param string $comparator Comparison operator.
+     * @param \DateTime $reference Date time to use in comparison.
+     * @param \FeatureToggle\Strategy\ComparisonOperator\ComparisonOperatorInterface $comparator
+     *   Comparison operator.
      */
-    public function __construct(string $datetime, string $comparator = '>=')
+    public function __construct(
+        DateTime $reference, 
+        ComparisonOperatorInterface $comparator = null)
     {
-        $this->datetime = $datetime;
-        $this->comparator = $comparator;
+        $this->reference = $reference;
+        $this->comparator = $comparator ?: new GreaterThanEqual();
     }
 
     /**
@@ -53,39 +57,28 @@ class DateTimeStrategy extends AbstractStrategy
      */
     public function __invoke(FeatureInterface $Feature, array $args = []): bool
     {
-        $time = $this->getCurrentTime();
-        $datetime = strtotime($this->datetime);
+        $time = new DateTime();
 
-        switch ($this->comparator) {
+        switch ($this->comparator->getValue()) {
             case '<':
-                $result = $time < $datetime;
+                $result = $time < $this->reference;
                 break;
             case '<=':
-                $result = $time <= $datetime;
+                $result = $time <= $this->reference;
                 break;
             case '>=':
-                $result = $time >= $datetime;
+                $result = $time >= $this->reference;
                 break;
             case '>':
-                $result = $time > $datetime;
+                $result = $time > $this->reference;
                 break;
             case '==':
-                $result = $time == $datetime;
+                $result = $time == $this->reference;
                 break;
             default:
-                throw new \InvalidArgumentException('Bad comparison operator.');
+                throw new InvalidArgumentException('Unsupported comparison operator.');
         }
 
         return $result;
-    }
-
-    /**
-     * Returns the current time. Used for dependency injection.
-     *
-     * @return string
-     */
-    public function getCurrentTime(): string
-    {
-        return time();
     }
 }

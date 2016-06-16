@@ -11,21 +11,20 @@
 
 namespace FeatureToggle\Strategy;
 
+use DateTime;
 use FeatureToggle\Feature\FeatureInterface;
+use FeatureToggle\Strategy\ComparisonOperator\GreaterThan;
+use FeatureToggle\Strategy\ComparisonOperator\LowerThan;
 
 /**
  * DateTimeRange strategy.
- *
- * @package FeatureToggle
- * @subpackage FeatureToggle.Strategy
- * @author Jad Bitar <jadbitar@mac.com>
  */
-class DateTimeRangeStrategy extends AbstractStrategy
+final class DateTimeRangeStrategy extends AbstractStrategy
 {
 
     const COMPARATORS = [
-        'minRange' => '>',
-        'maxRange' => '<'
+        'minRange' => GreaterThan::class,
+        'maxRange' => LowerThan::class
     ];
 
     /**
@@ -33,34 +32,34 @@ class DateTimeRangeStrategy extends AbstractStrategy
      *
      * @var boolean
      */
-    protected $inclusive;
+    private $inclusive;
 
     /**
      * Maximum date time.
      *
      * @var string
      */
-    protected $maxRange;
+    private $maxRange;
 
     /**
      * Minimum date time.
      *
      * @var string
      */
-    protected $minRange;
+    private $minRange;
 
     /**
      * Constructor.
      *
-     * @param string $minRange Minimum date time.
-     * @param string $maxRange Maximum date time.
-     * @param boolean $inclusive Include minimum and maximum dates in range.
+     * @param \DateTime $minRange Minimum date time.
+     * @param \DateTime $maxRange Maximum date time.
+     * @param bool $inclusive Include minimum and maximum dates in range.
      */
-    public function __construct(string $minRange, string $maxRange, bool $inclusive = false)
+    public function __construct(DateTime $minRange, DateTime $maxRange, bool $inclusive = false)
     {
-        $this->inclusive = $inclusive;
-        $this->maxRange = $maxRange;
         $this->minRange = $minRange;
+        $this->maxRange = $maxRange;
+        $this->inclusive = $inclusive;
     }
 
     /**
@@ -72,9 +71,10 @@ class DateTimeRangeStrategy extends AbstractStrategy
 
         foreach (static::COMPARATORS as $var => $comparator) {
             if ($this->inclusive) {
-                $comparator .= '=';
+                $comparator .= 'Equal';
             }
-            $strategies[$var] = $this->asDateTimeStrategy($this->$var, $comparator);
+
+            $strategies[$var] = new DateTimeStrategy($this->$var, new $comparator);
         }
 
         $result = true;
@@ -85,10 +85,5 @@ class DateTimeRangeStrategy extends AbstractStrategy
         }
 
         return $result;
-    }
-
-    public function asDateTimeStrategy(string $datetime, string $comparator): DateTimeStrategy
-    {
-        return new DateTimeStrategy($datetime, $comparator);
     }
 }
