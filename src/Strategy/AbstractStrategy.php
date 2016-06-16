@@ -13,10 +13,6 @@ namespace FeatureToggle\Strategy;
 
 /**
  * Abstract strategy.
- *
- * @package FeatureToggle
- * @subpackage FeatureToggle.Strategy
- * @author Jad Bitar <jadbitar@mac.com>
  */
 abstract class AbstractStrategy implements StrategyInterface
 {
@@ -30,28 +26,30 @@ abstract class AbstractStrategy implements StrategyInterface
     /**
      * {@inheritdoc}
      */
-    public function getName(): string
+    final public function getName(): string
     {
         if (empty($this->name)) {
-            $this->setName();
+            $this->name = $this->setName()->getName();
         }
 
         return $this->name;
     }
 
     /**
-     * Sets the strategy's name.
+     * Sets name of cloned strategy before returning that instance.
      *
      * @param string $name Strategy's name.
-     * @return void
+     * @return \FeatureToggle\Strategy\StrategyInterface
      */
-    public function setName(string $name = null)
+    private function setName(string $name = null): StrategyInterface
     {
         if (empty($name)) {
             $classname = explode('\\', get_class($this));
             $name = substr(array_pop($classname), 0, - strlen('Strategy'));
         }
 
-        $this->name = $name;
+        $strategy = clone($this);
+        $strategy->name = $name;
+        return $strategy;
     }
 }

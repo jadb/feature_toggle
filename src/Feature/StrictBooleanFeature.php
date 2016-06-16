@@ -14,10 +14,7 @@ namespace FeatureToggle\Feature;
 /**
  * Boolean feature.
  *
- * @package FeatureToggle
- * @subpackage FeatureToggle.Feature
- * @author Jad Bitar <bitarjad@gmail.com>
- * @author Raúl Santos <borfast@gmail.com>
+ * Considered enabled only if entire strategies' stack passes.
  */
 class StrictBooleanFeature extends BooleanFeature
 {

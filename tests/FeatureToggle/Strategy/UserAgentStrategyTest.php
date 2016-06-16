@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the FeatureToggle package.
@@ -9,73 +9,40 @@
  * file that was distributed with this source code.
  */
 
-namespace FeatureToggle;
+namespace FeatureToggle\Test\Strategy;
 
-use FeatureToggle\Feature\TestFeature;
+use FeatureToggle\Feature\BooleanFeature;
 use FeatureToggle\Strategy\UserAgentStrategy;
 
 /**
  * Boolean feature test class.
- *
- * @package FeatureToggle
- * @author Jad Bitar <jadbitar@mac.com>
- * @coversDefaultClass \FeatureToggle\Strategy\UserAgentStrategy
  */
 class UserAgentStrategyTest extends \PHPUnit_Framework_TestCase
 {
-    private $resetVar;
-    private $Strategy;
+
+    /**
+     * @var \FeatureToggle\Strategy\UserAgentStrategy
+     */
+    private $strategy;
 
     /**
      * {@inheritdoc}
      */
     public function setUp()
     {
-        $this->Strategy = new UserAgentStrategy(array('/foo$/', '/^bar/'));
-        $this->resetVar = $_SERVER;
-        $_SERVER = array();
+        $this->strategy = new UserAgentStrategy(['/foo/', '/bar/']);
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function tearDown()
-    {
-        $_SERVER = $this->resetVar;
-        unset($this->resetVar, $this->Strategy);
-    }
-
-    /**
-     * @covers ::__construct
-     */
-    public function testConstruct()
-    {
-        $this->assertObjectHasAttribute('patterns', $this->Strategy);
-    }
-
-    /**
-     * @covers ::getUserAgent
-     */
-    public function testGetUserAgent()
-    {
-        $result = $this->Strategy->getUserAgent();
-        $expected = '';
-        $this->assertEquals($expected, $result);
-
-        $_SERVER['HTTP_USER_AGENT'] = 'foo';
-        $result = $this->Strategy->getUserAgent();
-        $expected = 'foo';
-        $this->assertEquals($expected, $result);
-    }
-
-    /**
+     * @test
      * @covers ::__invoke
      */
-    public function testInvoke()
+    public function itShouldNotMatchAnyPattern()
     {
-        $this->assertFalse(call_user_func($this->Strategy, new TestFeature('foo')));
+        $strategy = $this->strategy;
+        $this->assertFalse($strategy(new BooleanFeature('foo')));
 
         $_SERVER['HTTP_USER_AGENT'] = 'foo';
-        $this->assertTrue(call_user_func($this->Strategy, new TestFeature('foo')));
+        $this->assertTrue($strategy(new BooleanFeature('foo')));
     }
 }

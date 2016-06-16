@@ -15,10 +15,6 @@ use FeatureToggle\Feature\FeatureInterface;
 
 /**
  * User agent strategy.
- *
- * @package FeatureToggle
- * @subpackage FeatureToggle.Strategy
- * @author Jad Bitar <jadbitar@mac.com>
  */
 class UserAgentStrategy extends AbstractStrategy
 {
@@ -27,14 +23,14 @@ class UserAgentStrategy extends AbstractStrategy
      *
      * @var array
      */
-    protected $patterns;
+    private $patterns;
 
     /**
      * Constructor.
      *
      * @param string[] $patterns Allowed user agents' patterns.
      */
-    public function __construct(array $patterns)
+    final public function __construct(array $patterns)
     {
         $this->patterns = $patterns;
     }
@@ -42,7 +38,7 @@ class UserAgentStrategy extends AbstractStrategy
     /**
      * {@inheritdoc}
      */
-    public function __invoke(FeatureInterface $Feature, array $args = []): bool
+    final public function __invoke(FeatureInterface $Feature, array $args = []): bool
     {
         $userAgent = $this->getUserAgent();
 
@@ -60,7 +56,7 @@ class UserAgentStrategy extends AbstractStrategy
      *
      * @return string
      */
-    public function getUserAgent(): string
+    protected function getUserAgent(): string
     {
         if (!array_key_exists('HTTP_USER_AGENT', $_SERVER)) {
             return '';

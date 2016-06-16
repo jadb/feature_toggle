@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the FeatureToggle package.
@@ -9,189 +9,74 @@
  * file that was distributed with this source code.
  */
 
-namespace FeatureToggle;
+namespace FeatureToggle\Test\Strategy;
 
-use FeatureToggle\Feature\TestFeature;
+use DateTime;
+use FeatureToggle\Feature\BooleanFeature;
+use FeatureToggle\Strategy\ComparisonOperator\Equal;
+use FeatureToggle\Strategy\ComparisonOperator\GreaterThan;
+use FeatureToggle\Strategy\ComparisonOperator\GreaterThanEqual;
+use FeatureToggle\Strategy\ComparisonOperator\LowerThan;
+use FeatureToggle\Strategy\ComparisonOperator\LowerThanEqual;
 use FeatureToggle\Strategy\DateTimeStrategy;
 
 /**
  * DateTime strategy test class.
- *
- * @package FeatureToggle
- * @author Jad Bitar <jadbitar@mac.com>
- * @coversDefaultClass \FeatureToggle\Strategy\DateTimeStrategy
  */
 class DateTimeStrategyTest extends \PHPUnit_Framework_TestCase
 {
+
     /**
-     * @covers ::__construct
+     * @test
      */
-    public function testConstruct()
+    public function itShouldBeConsideredEnabledWhenDateIsEqual()
     {
-        $Strategy = new DateTimeStrategy('2014-03-01');
-        $this->assertObjectHasAttribute('datetime', $Strategy);
-        $this->assertObjectHasAttribute('comparator', $Strategy);
+        $strategy = new DateTimeStrategy(new DateTime('now'), new Equal());
+        $this->assertTrue($strategy(new BooleanFeature('foo')));
     }
 
     /**
-     * @covers ::__invoke
+     * @test
      */
-    public function testInvoke()
+    public function itShouldBeConsideredEnabledWhenDateIsGreaterThan()
     {
-        // >=
-        $datetime = '2014-03-01';
-        $now = '2014-02-24';
-        $StrategyMock = $this->getMock(
-            '\FeatureToggle\Strategy\DateTimeStrategy',
-            array('getCurrentTime'),
-            array($datetime)
-        );
-
-        $StrategyMock->expects($this->once())
-            ->method('getCurrentTime')
-            ->will($this->returnValue(strtotime($now)));
-
-        $this->assertFalse(call_user_func($StrategyMock, new TestFeature('foo')));
-
-        // >=
-        $datetime = '2014-03-01';
-        $now = '2014-03-01';
-        $StrategyMock = $this->getMock(
-            '\FeatureToggle\Strategy\DateTimeStrategy',
-            array('getCurrentTime'),
-            array($datetime)
-        );
-
-        $StrategyMock->expects($this->once())
-            ->method('getCurrentTime')
-            ->will($this->returnValue(strtotime($now)));
-
-        $this->assertTrue(call_user_func($StrategyMock, new TestFeature('foo')));
-
-        // ==
-        $datetime = '2014-03-01';
-        $now = '2014-03-01';
-        $StrategyMock = $this->getMock(
-            '\FeatureToggle\Strategy\DateTimeStrategy',
-            array('getCurrentTime'),
-            array($datetime, '==')
-        );
-
-        $StrategyMock->expects($this->once())
-            ->method('getCurrentTime')
-            ->will($this->returnValue(strtotime($now)));
-
-        $this->assertTrue(call_user_func($StrategyMock, new TestFeature('foo')));
-
-        // ==
-        $datetime = '2014-03-01';
-        $now = '2014-03-02';
-        $StrategyMock = $this->getMock(
-            '\FeatureToggle\Strategy\DateTimeStrategy',
-            array('getCurrentTime'),
-            array($datetime, '==')
-        );
-
-        $StrategyMock->expects($this->once())
-            ->method('getCurrentTime')
-            ->will($this->returnValue(strtotime($now)));
-
-        $this->assertFalse(call_user_func($StrategyMock, new TestFeature('foo')));
-
-        // >
-        $datetime = '2014-03-01';
-        $now = '2014-03-01';
-        $StrategyMock = $this->getMock(
-            '\FeatureToggle\Strategy\DateTimeStrategy',
-            array('getCurrentTime'),
-            array($datetime, '>')
-        );
-
-        $StrategyMock->expects($this->once())
-            ->method('getCurrentTime')
-            ->will($this->returnValue(strtotime($now)));
-
-        $this->assertFalse(call_user_func($StrategyMock, new TestFeature('foo')));
-
-        // >
-        $datetime = '2014-03-01';
-        $now = '2014-02-24';
-        $StrategyMock = $this->getMock(
-            '\FeatureToggle\Strategy\DateTimeStrategy',
-            array('getCurrentTime'),
-            array($datetime, '>')
-        );
-
-        $StrategyMock->expects($this->once())
-            ->method('getCurrentTime')
-            ->will($this->returnValue(strtotime($now)));
-
-        $this->assertFalse(call_user_func($StrategyMock, new TestFeature('foo')));
-
-        // <
-        $datetime = '2014-03-01';
-        $now = '2014-02-24';
-        $StrategyMock = $this->getMock(
-            '\FeatureToggle\Strategy\DateTimeStrategy',
-            array('getCurrentTime'),
-            array($datetime, '<')
-        );
-
-        $StrategyMock->expects($this->once())
-            ->method('getCurrentTime')
-            ->will($this->returnValue(strtotime($now)));
-
-        $this->assertTrue(call_user_func($StrategyMock, new TestFeature('foo')));
-
-        // <
-        $datetime = '2014-03-01';
-        $now = '2014-03-01';
-        $StrategyMock = $this->getMock(
-            '\FeatureToggle\Strategy\DateTimeStrategy',
-            array('getCurrentTime'),
-            array($datetime, '<')
-        );
-
-        $StrategyMock->expects($this->once())
-            ->method('getCurrentTime')
-            ->will($this->returnValue(strtotime($now)));
-
-        $this->assertFalse(call_user_func($StrategyMock, new TestFeature('foo')));
-
-        // <=
-        $datetime = '2014-03-01';
-        $now = '2014-03-01';
-        $StrategyMock = $this->getMock(
-            '\FeatureToggle\Strategy\DateTimeStrategy',
-            array('getCurrentTime'),
-            array($datetime, '<=')
-        );
-
-        $StrategyMock->expects($this->once())
-            ->method('getCurrentTime')
-            ->will($this->returnValue(strtotime($now)));
-
-        $this->assertTrue(call_user_func($StrategyMock, new TestFeature('foo')));
+        $strategy = new DateTimeStrategy(new DateTime('yesterday'), new GreaterThan());
+        $this->assertTrue($strategy(new BooleanFeature('foo')));
     }
 
     /**
-     * @covers ::__invoke
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Bad comparison operator.
+     * @test
      */
-    public function testInvokeThrowsException()
+    public function itShouldBeConsideredEnabledWhenDateIsLowerThan()
     {
-        call_user_func(new DateTimeStrategy('2014-03-01', '<>'), new TestFeature('foo'));
+        $strategy = new DateTimeStrategy(new DateTime('tomorrow'), new LowerThan());
+        $this->assertTrue($strategy(new BooleanFeature('foo')));
     }
 
     /**
-     * @covers ::getCurrentTime
+     * @test
      */
-    public function testGetCurrentTime()
+    public function itShouldBeConsideredEnabledWhenDateIsGreaterThanOrEqual()
     {
-        $Strategy = new DateTimeStrategy('2014-03-01');
-        $expected = time();
-        $actual = $Strategy->getCurrentTime();
-        $this->assertEquals($expected, $actual);
+        $strategy = new DateTimeStrategy(new DateTime('now'), new GreaterThanEqual());
+        $this->assertTrue($strategy(new BooleanFeature('foo')));
+    }
+
+    /**
+     * @test
+     */
+    public function itDefaultsToUsingGreaterThanOrEqualComparisonOperator()
+    {
+        $strategy = new DateTimeStrategy(new DateTime('now'));
+        $this->assertTrue($strategy(new BooleanFeature('foo')));
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldBeConsideredEnabledWhenDateIsLowerThanOrEqual()
+    {
+        $strategy = new DateTimeStrategy(new DateTime('now'), new LowerThanEqual());
+        $this->assertTrue($strategy(new BooleanFeature('foo')));
     }
 }

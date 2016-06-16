@@ -14,9 +14,7 @@ namespace FeatureToggle\Feature;
 /**
  * Boolean feature.
  *
- * @package FeatureToggle
- * @subpackage FeatureToggle.Feature
- * @author Jad Bitar <jadbitar@mac.com>
+ * Considered enabled if one ore more strategies pass.
  */
 class BooleanFeature extends AbstractFeature
 {
@@ -25,7 +23,7 @@ class BooleanFeature extends AbstractFeature
      *
      * @var boolean
      */
-    protected $isEnabled = false;
+    private $isEnabled = false;
 
     /**
      * Mode.
@@ -44,21 +42,21 @@ class BooleanFeature extends AbstractFeature
     /**
      * Sets feature's default state to disabled.
      *
-     * @return void
+     * @return \FeatureToggle\Feature\BooleanFeature
      */
-    public function disable()
+    final public function disable(): BooleanFeature
     {
-        $this->isEnabled = false;
+        return $this->setState(false);
     }
 
     /**
      * Sets feature's default state to enabled.
      *
-     * @return void
+     * @return \FeatureToggle\Feature\BooleanFeature
      */
-    public function enable()
+    final public function enable(): BooleanFeature
     {
-        $this->isEnabled = true;
+        return $this->setState(true);
     }
 
     /**
@@ -89,6 +87,18 @@ class BooleanFeature extends AbstractFeature
             }
         }
 
-        return $isEnabled > $this->threshold || (!$this->strict && ($isEnabled === $this->threshold));
+        return $isEnabled > $this->threshold
+            || ($this->strict && $isEnabled === $this->threshold);
+    }
+
+    /**
+     * @param bool $enabled
+     * @return \FeatureToggle\Feature\BooleanFeature
+     */
+    private function setState(bool $enabled): BooleanFeature
+    {
+        $feature = clone($this);
+        $feature->isEnabled = $enabled;
+        return $feature;
     }
 }

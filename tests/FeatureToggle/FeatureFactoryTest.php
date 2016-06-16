@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the FeatureToggle package.
@@ -11,10 +11,12 @@
 
 namespace FeatureToggle\Test;
 
+use DateTime;
 use FeatureToggle\Feature\BooleanFeature;
 use FeatureToggle\Feature\FeatureInterface;
 use FeatureToggle\FeatureFactory;
 use FeatureToggle\Strategy\AbstractStrategy;
+use FeatureToggle\Strategy\ComparisonOperator\LowerThan;
 use FeatureToggle\Strategy\DateTimeStrategy;
 use FeatureToggle\Stub\ForTestingItShouldPushAnyCallableStrategy;
 
@@ -55,7 +57,7 @@ class FeatureFactoryTest extends \PHPUnit_Framework_TestCase
         $function = '\FeatureToggle\Stub\forTestingItShouldPushAnyCallableStrategy';
         $method = [$this, 'forTestingItShouldPushAnyCallableStrategy'];
         $object = new ForTestingItShouldPushAnyCallableStrategy();
-        $strategy = new DateTimeStrategy(date('Y-m-d', strtotime('tomorrow')), '<');
+        $strategy = new DateTimeStrategy(new DateTime('tomorrow'), new LowerThan());
 
         $type = 'strictBoolean';
         $strategies = [

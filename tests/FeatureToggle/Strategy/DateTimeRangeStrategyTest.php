@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the FeatureToggle package.
@@ -9,81 +9,69 @@
  * file that was distributed with this source code.
  */
 
-namespace FeatureToggle;
+namespace FeatureToggle\Test\Strategy;
 
-use FeatureToggle\Feature\TestFeature;
+use DateTime;
+use FeatureToggle\Feature\BooleanFeature;
 use FeatureToggle\Strategy\DateTimeRangeStrategy;
 
 /**
  * DateTimeRange strategy test class.
- *
- * @package FeatureToggle
- * @author Jad Bitar <jadbitar@mac.com>
- * @coversDefaultClass \FeatureToggle\Strategy\DateTimeRangeStrategy
  */
 class DateTimeRangeStrategyTest extends \PHPUnit_Framework_TestCase
 {
-    private $Strategy;
-    public function setUp()
-    {
-        $this->Strategy = $this->getMock(
-            '\FeatureToggle\Strategy\DateTimeRangeStrategy',
-            array('asDateTimeStrategy'),
-            array('2014-01-01', '2014-12-31', true)
-        );
-    }
 
-    public function tearDown()
-    {
-        unset($this->Strategy);
-    }
     /**
-     * @covers ::__construct
+     * @test
      */
-    public function testConstruct()
+    public function itShouldBeConsideredEnabledWhenDateIsWithinRangeNonInclusive()
     {
-        $this->assertObjectHasAttribute('inclusive', $this->Strategy);
-        $this->assertObjectHasAttribute('minRange', $this->Strategy);
-        $this->assertObjectHasAttribute('maxRange', $this->Strategy);
+        $strategy = new DateTimeRangeStrategy(
+            new DateTime('-1 week'),
+            new DateTime('+1 week')
+        );
+
+        $this->assertTrue($strategy(new BooleanFeature('foo')));
     }
 
     /**
-     * @covers ::__invoke
+     * @test
      */
-    public function testInvoke()
+    public function itShouldBeConsideredEnabledWhenDateIsWithinRange()
     {
-        $Feature = new TestFeature('foo');
-
-        $DateTimeStrategyMock = $this->getMock(
-            '\FeatureToggle\Strategy\DateTimeStrategy',
-            array('__invoke'),
-            array('2013-03-01')
+        $strategy = new DateTimeRangeStrategy(
+            new DateTime('-1 week'),
+            new DateTime('1 second'),
+            true
         );
 
-        $this->Strategy->expects($this->at(0))
-            ->method('asDateTimeStrategy')
-            ->with('2014-01-01', '>=')
-            ->will($this->returnValue($DateTimeStrategyMock));
-
-        $this->Strategy->expects($this->at(1))
-            ->method('asDateTimeStrategy')
-            ->with('2014-12-31', '<=')
-            ->will($this->returnValue($DateTimeStrategyMock));
-
-        $DateTimeStrategyMock->expects($this->exactly(2))
-            ->method('__invoke')
-            ->with($Feature)
-            ->will($this->returnValue(false));
-
-        $this->assertFalse(call_user_func($this->Strategy, $Feature));
+        $this->assertTrue($strategy(new BooleanFeature('foo')));
     }
 
-    public function testAsDateTimeStrategy()
+    /**
+     * @test
+     */
+    public function itShouldBeConsideredDisabledWhenDateIsNotWithinRangeNotInclusive()
     {
-        $Strategy = new DateTimeRangeStrategy('2014-01-01', '2014-12-31');
+        $strategy = new DateTimeRangeStrategy(
+            new DateTime('-1 week'),
+            new DateTime('-1 minute')
+        );
 
-        $expected = new \FeatureToggle\Strategy\DateTimeStrategy('2014-01-01', '>');
-        $actual = $Strategy->asDateTimeStrategy('2014-01-01', '>');
-        $this->assertEquals($expected, $actual);
+        $this->assertFalse($strategy(new BooleanFeature('foo')));
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldBeConsideredDisabledWhenDateIsNotWithinRange()
+    {
+        $strategy = new DateTimeRangeStrategy(
+            new DateTime('-1 week'),
+            new DateTime('1 second'),
+            true
+        );
+
+        $this->assertTrue($strategy(new BooleanFeature('foo')));
     }
 }

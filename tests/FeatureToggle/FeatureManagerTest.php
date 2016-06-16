@@ -24,8 +24,8 @@ class FeatureManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldLocateAndDelegate()
     {
-        FeatureRegistry::add('foo', new EnabledFeature());
-        FeatureRegistry::add('bar', new DisabledFeature());
+        FeatureRegistry::add('foo', new EnabledFeature('foo'));
+        FeatureRegistry::add('bar', new DisabledFeature('bar'));
         $this->assertTrue(FeatureManager::isEnabled('foo'));
         $this->assertFalse(FeatureManager::isEnabled('bar'));
     }

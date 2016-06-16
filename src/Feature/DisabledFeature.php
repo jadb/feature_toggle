@@ -14,9 +14,7 @@ namespace FeatureToggle\Feature;
 /**
  * Disabled feature.
  *
- * @package FeatureToggle
- * @subpackage FeatureToggle.Feature
- * @author Jad Bitar <jadbitar@mac.com>
+ * Forces feature to always be disabled.
  */
 class DisabledFeature extends BooleanFeature
 {

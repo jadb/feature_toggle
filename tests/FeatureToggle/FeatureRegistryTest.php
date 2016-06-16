@@ -24,12 +24,10 @@ class FeatureRegistryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @covers ::add
-     * @covers ::get
      */
     public function itShouldAddAndReturnDifferentInstances()
     {
-        $feature = new BooleanFeature();
+        $feature = new BooleanFeature('foo');
         FeatureRegistry::add('Test', $feature);
         $result = FeatureRegistry::get('Test');
         $this->assertNotSame($feature, $result);
@@ -38,31 +36,28 @@ class FeatureRegistryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @covers ::add
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Duplicate feature identifier.
      */
     public function itShouldNotAllowDuplicateFeatureNames()
     {
-        $feature = new BooleanFeature();
+        $feature = new BooleanFeature('foo');
         FeatureRegistry::add('Test Feature', $feature);
         FeatureRegistry::add('Test Feature', $feature);
     }
 
     /**
      * @test
-     * @covers ::check
      */
     public function itShouldDelegate()
     {
-        $feature = new BooleanFeature();
+        $feature = new BooleanFeature('foo');
         FeatureRegistry::add('Test Feature', $feature);
         $this->assertTrue(FeatureRegistry::check('Test Feature'));
         $this->assertFalse(FeatureRegistry::check('Undefined Feature'));
     }
 
     /**
-     * @covers ::flush
      * @expectedException \InvalidArgumentException
      */
     public function itShouldFlushTheRegistry()
@@ -75,7 +70,6 @@ class FeatureRegistryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @covers ::get
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Unknown feature identifier.
      */
@@ -86,7 +80,6 @@ class FeatureRegistryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @covers ::init
      */
     public function itShouldCreateAndAddFeatureToRegistry()
     {

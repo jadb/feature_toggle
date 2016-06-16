@@ -11,12 +11,12 @@
 
 namespace FeatureToggle\Feature;
 
+use InvalidArgumentException;
+
 /**
  * Threshold feature.
  *
- * @package FeatureToggle
- * @subpackage FeatureToggle.Feature
- * @author Jad Bitar <bitarjad@gmail.com>
+ * Considered enabled only if a minimum number of strategies pass.
  */
 class ThresholdFeature extends BooleanFeature
 {
@@ -30,7 +30,7 @@ class ThresholdFeature extends BooleanFeature
     {
         if ($val !== null) {
             if (!is_int($val)) {
-                throw new \InvalidArgumentException('Only integer allowed.');
+                throw new InvalidArgumentException('Only integer allowed.');
             }
             $this->threshold = $val;
         }
