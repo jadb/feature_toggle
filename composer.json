@@ -4,7 +4,7 @@
     "keywords": ["continuous integration", "feature toggle", "feature toggling"],
     "homepage": "http://github.com/jadb/feature_toggle",
     "type": "library",
-    "license": "BSD-3-Clause",
+    "license": "MIT",
     "authors": [
         {
             "name": "Jad Bitar",

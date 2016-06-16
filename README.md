@@ -131,10 +131,10 @@ http://github.com/jadb/feature_toggle/issues
 
 Copyright (c) 2014, [Jad Bitar][jadbio]
 
-Licensed under the [BSD 3-Clause License][bsd3clause].
+Licensed under the [MIT license][mit].
 
 Redistributions of files must retain the above copyright notice.
 
 [jadbio]:http://jadb.io
-[bsd3clause]:http://opensource.org/licenses/BSD-3-Clause
+[mit]:https://github.com/jadb/feature_toggle/blob/master/LICENSE
 [composer]:http://getcomposer.org
