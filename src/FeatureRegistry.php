@@ -11,10 +11,10 @@
 
 namespace FeatureToggle;
 
+use FeatureToggle\Exception\UnknownFeatureException;
 use FeatureToggle\Feature\FeatureInterface;
 use FeatureToggle\Storage\HashStorage;
 use FeatureToggle\Storage\StorageInterface;
-use InvalidArgumentException;
 
 /**
  * Feature registry.
@@ -59,7 +59,7 @@ class FeatureRegistry
         try {
             static::getStorage()->get($name);
             return true;
-        } catch (InvalidArgumentException $e) {
+        } catch (UnknownFeatureException $e) {
             return false;
         }
     }
@@ -79,7 +79,8 @@ class FeatureRegistry
      *
      * @param string $name Feature's name.
      * @return \FeatureToggle\Feature\FeatureInterface Feature object.
-     * @throws \InvalidArgumentException If feature's name does not exist in registry.
+     * @throws \FeatureToggle\Exception\UnknownFeatureException If feature's name does
+     *   not exist in registry.
      */
     public static function get(string $name): FeatureInterface
     {
@@ -92,6 +93,8 @@ class FeatureRegistry
      * @param string $name Feature's name.
      * @param array $config Feature configuration.
      * @return \FeatureToggle\Feature\FeatureInterface Feature object.
+     * @throws \FeatureToggle\Exception\UnknownFeatureException If feature's name does
+     *   not exist in registry.
      */
     public static function init(string $name, array $config = []): FeatureInterface
     {

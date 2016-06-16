@@ -12,10 +12,10 @@
 namespace FeatureToggle\Strategy;
 
 use DateTime;
+use FeatureToggle\Exception\UnsupportedComparisonOperatorException;
 use FeatureToggle\Feature\FeatureInterface;
 use FeatureToggle\Strategy\ComparisonOperator\ComparisonOperatorInterface;
 use FeatureToggle\Strategy\ComparisonOperator\GreaterThanEqual;
-use InvalidArgumentException;
 
 /**
  * DateTime strategy.
@@ -43,6 +43,8 @@ final class DateTimeStrategy extends AbstractStrategy
      * @param \DateTime $reference Date time to use in comparison.
      * @param \FeatureToggle\Strategy\ComparisonOperator\ComparisonOperatorInterface $comparator
      *   Comparison operator.
+     * @throws \FeatureToggle\Exception\UnsupportedComparisonOperatorException When operator is
+     *   not supported.
      */
     public function __construct(DateTime $reference, ComparisonOperatorInterface $comparator = null)
     {
@@ -74,7 +76,7 @@ final class DateTimeStrategy extends AbstractStrategy
                 $result = $time == $this->reference;
                 break;
             default:
-                throw new InvalidArgumentException('Unsupported comparison operator.');
+                throw new UnsupportedComparisonOperatorException();
         }
 
         return $result;

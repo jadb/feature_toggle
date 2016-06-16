@@ -11,8 +11,6 @@
 
 namespace FeatureToggle\Feature;
 
-use InvalidArgumentException;
-
 /**
  * Threshold feature.
  *
@@ -29,11 +27,9 @@ class ThresholdFeature extends BooleanFeature
     public function threshold(int $val = null): int
     {
         if ($val !== null) {
-            if (!is_int($val)) {
-                throw new InvalidArgumentException('Only integer allowed.');
-            }
             $this->threshold = $val;
         }
+
         return $this->threshold;
     }
 }

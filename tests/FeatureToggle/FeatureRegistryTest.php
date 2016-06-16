@@ -13,7 +13,6 @@ namespace FeatureToggle\Test;
 
 use FeatureToggle\Feature\BooleanFeature;
 use FeatureToggle\FeatureRegistry;
-use InvalidArgumentException;
 
 class FeatureRegistryTest extends \PHPUnit_Framework_TestCase
 {
@@ -36,7 +35,7 @@ class FeatureRegistryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \InvalidArgumentException
+     * @expectedException \FeatureToggle\Exception\DuplicateFeatureException
      * @expectedExceptionMessage Duplicate feature identifier.
      */
     public function itShouldNotAllowDuplicateFeatureNames()
@@ -58,7 +57,7 @@ class FeatureRegistryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \FeatureToggle\Exception\DuplicateFeatureException
      */
     public function itShouldFlushTheRegistry()
     {
@@ -70,7 +69,7 @@ class FeatureRegistryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \InvalidArgumentException
+     * @expectedException \FeatureToggle\Exception\UnknownFeatureException
      * @expectedExceptionMessage Unknown feature identifier.
      */
     public function itShouldNotFailSilentlyOnUndefinedFeatures()
