@@ -32,7 +32,8 @@
         "php": "^7.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^5.0"
+        "phpunit/phpunit": "^5.0",
+        "predis/predis": "^1.1"
     },
     "autoload": {
         "psr-4": {
@@ -43,5 +44,8 @@
         "branch-alias": {
             "dev-master": "1.0-dev"
         }
+    },
+    "suggest": {
+        "predis/predis": "If you want to use the `RedisStorage`"
     }
 }
