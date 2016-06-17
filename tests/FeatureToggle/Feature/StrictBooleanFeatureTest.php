@@ -51,12 +51,30 @@ class StrictBooleanFeatureTest extends \PHPUnit_Framework_TestCase
             {
                 return true;
             }
+
+            public function serialize(): string
+            {
+                return '';
+            }
+
+            public function unserialize($serialized)
+            {
+            }
         };
 
         $strategy2 = new class extends AbstractStrategy {
             public function __invoke(FeatureInterface $Feature, array $args = []): bool
             {
                 return true;
+            }
+
+            public function serialize(): string
+            {
+                return '';
+            }
+
+            public function unserialize($serialized)
+            {
             }
         };
         // @codingStandardsIgnoreEnd
@@ -79,6 +97,15 @@ class StrictBooleanFeatureTest extends \PHPUnit_Framework_TestCase
             {
                 return true;
             }
+
+            public function serialize(): string
+            {
+                return '';
+            }
+
+            public function unserialize($serialized)
+            {
+            }
         };
 
         $strategy2 = new class extends AbstractStrategy {
@@ -86,6 +113,16 @@ class StrictBooleanFeatureTest extends \PHPUnit_Framework_TestCase
             {
                 return false;
             }
+
+            public function serialize(): string
+            {
+                return '';
+            }
+
+            public function unserialize($serialized)
+            {
+            }
+
         };
         // @codingStandardsIgnoreEnd
 

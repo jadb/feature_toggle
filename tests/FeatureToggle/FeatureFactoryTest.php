@@ -49,6 +49,16 @@ class FeatureFactoryTest extends \PHPUnit_Framework_TestCase
                 {
                     return current($args);
                 }
+
+                public function serialize(): string
+                {
+                    return '';
+                }
+
+                public function unserialize($serialized)
+                {
+                }
+
             },
             'foo'
         ];
@@ -57,6 +67,15 @@ class FeatureFactoryTest extends \PHPUnit_Framework_TestCase
             public function __invoke(FeatureInterface $feature, array $args = []): bool
             {
                 return current($args);
+            }
+
+            public function serialize(): string
+            {
+                return '';
+            }
+
+            public function unserialize($serialized)
+            {
             }
         };
         // @codingStandardsIgnoreEnd
