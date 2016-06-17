@@ -28,6 +28,8 @@ From [Wikipedia](http://en.wikipedia.org/wiki/Feature_toggle):
 FeatureToggle can be installed using [Composer][composer] (of course, you could always
 clone it from GitHub).
 
+**NOTE:** For PHP5.x support, please check the [0.1.0] branch.
+
 In `composer.json`:
 
 ```json
@@ -150,3 +152,4 @@ Redistributions of files must retain the above copyright notice.
 [composer]:http://getcomposer.org
 [memcached]:http://php.net/manual/en/book.memcached.php
 [predis]:http://packagist.org/predis/predis
+[0.1.0]:https://github.com/jadb/feature_toggle/tree/0.1.0
