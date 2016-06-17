@@ -46,7 +46,7 @@ abstract class AbstractFeature implements FeatureInterface
     public function __construct(string $name, string $description = null)
     {
         $this->name = $name;
-        $this->description = $description;
+        $this->description = $description ?: '';
     }
 
     /**
