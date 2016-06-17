@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 /*
  * This file is part of the FeatureToggle package.
@@ -9,5 +9,10 @@
  * file that was distributed with this source code.
  */
 
-require dirname(__DIR__) . '/vendor/autoload.php';
-require __DIR__ . '/Fixture/stubs.php';
+namespace FeatureToggle\Strategy\ComparisonOperator;
+
+class Equal extends AbstractComparisonOperator
+{
+
+    protected $value = '==';
+}

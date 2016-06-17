@@ -28,12 +28,14 @@ From [Wikipedia](http://en.wikipedia.org/wiki/Feature_toggle):
 FeatureToggle can be installed using [Composer][composer] (of course, you could always
 clone it from GitHub).
 
+**NOTE:** For PHP5.x support, please check the [0.1.0] branch.
+
 In `composer.json`:
 
 ```json
 {
     "require": {
-        "jadb/feature_toggle": "*"
+        "jadb/feature_toggle": "^1.0"
     }
 }
 ```
@@ -50,6 +52,9 @@ In your application's bootstrap:
 
 ```php
 use FeatureToggle\FeatureRegistry;
+use Predis\Client as Redis;
+
+FeatureRegistry::setStorage(new Redis());
 
 FeatureRegistry::init('Cool Feature', [
 	'description' => 'A cool new feature!',
@@ -107,10 +112,17 @@ Features __MUST__ implement the `FeatureInterface`.
 
 Strategies __MUST__ implement the `StrategyInterface`.
 
+### Storage Adapters
+
+* __HashStorage__: Default. Basic associative array (a.k.a. in memory)
+* __FileStorage__: Filesystem used (only good if features stored in database).
+* __MemcachedStorage__: Memcached store, requires the [`Memcached`][memcached] extension.
+* __RedisStorage__: Redis store, requires the [`predis/predis`][predis] package.
+
+Storage adapaters __MUST__ implement the `StorageInterface`.
+
 ## Todo
 
-* ~~Enable feature only when {n} (or all) strategies pass~~
-* `RedisStorage` to keep track of features
 * `PercentageStrategy` enable feature to a percentage of users - requires `RedisStorage`
 * Option to automatically disable a feature if error threshold reached - requires `RedisStorage`
 
@@ -131,10 +143,13 @@ http://github.com/jadb/feature_toggle/issues
 
 Copyright (c) 2014, [Jad Bitar][jadbio]
 
-Licensed under the [BSD 3-Clause License][bsd3clause].
+Licensed under the [MIT license][mit].
 
 Redistributions of files must retain the above copyright notice.
 
 [jadbio]:http://jadb.io
-[bsd3clause]:http://opensource.org/licenses/BSD-3-Clause
+[mit]:https://github.com/jadb/feature_toggle/blob/master/LICENSE
 [composer]:http://getcomposer.org
+[memcached]:http://php.net/manual/en/book.memcached.php
+[predis]:http://packagist.org/predis/predis
+[0.1.0]:https://github.com/jadb/feature_toggle/tree/0.1.0

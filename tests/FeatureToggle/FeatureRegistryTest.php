@@ -9,15 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace FeatureToggle;
+namespace FeatureToggle\Test;
 
-/**
- * Test FeatureRegistry class.
- *
- * @package FeatureToggle
- * @author Jad Bitar <jadbitar@mac.com>
- * @coversDefaultClass \FeatureToggle\FeatureRegistry
- */
+use FeatureToggle\Feature\BooleanFeature;
+use FeatureToggle\FeatureRegistry;
+
 class FeatureRegistryTest extends \PHPUnit_Framework_TestCase
 {
     public function tearDown()
@@ -26,92 +22,68 @@ class FeatureRegistryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::add
+     * @test
      */
-    public function testAdd()
+    public function itShouldAddAndReturnDifferentInstances()
     {
-        $Feature = new Feature\BooleanFeature('Test Feature');
-        FeatureRegistry::add('Test Feature', $Feature);
-
-        $expected = $Feature;
-        $actual = FeatureRegistry::get('Test Feature');
-
-        $this->assertEquals($expected, $actual);
+        $feature = new BooleanFeature('foo');
+        FeatureRegistry::add('Test', $feature);
+        $result = FeatureRegistry::get('Test');
+        $this->assertNotSame($feature, $result);
+        $this->assertInstanceOf(BooleanFeature::class, $result);
     }
 
     /**
-     * @covers ::add
-     * @expectedException \InvalidArgumentException
+     * @test
+     * @expectedException \FeatureToggle\Exception\DuplicateFeatureException
      * @expectedExceptionMessage Duplicate feature identifier.
      */
-    public function testAddThrowsException()
+    public function itShouldNotAllowDuplicateFeatureNames()
     {
-        $Feature = new Feature\BooleanFeature('Test Feature');
-        FeatureRegistry::add('Test Feature', $Feature);
-        FeatureRegistry::add('Test Feature', $Feature);
+        $feature = new BooleanFeature('foo');
+        FeatureRegistry::add('Test Feature', $feature);
+        FeatureRegistry::add('Test Feature', $feature);
     }
 
     /**
-     * @covers ::check
+     * @test
      */
-    public function testCheck()
+    public function itShouldDelegate()
     {
-        $Feature = new Feature\BooleanFeature('Test Feature');
-        FeatureRegistry::add('Test Feature', $Feature);
-
+        $feature = new BooleanFeature('foo');
+        FeatureRegistry::add('Test Feature', $feature);
         $this->assertTrue(FeatureRegistry::check('Test Feature'));
         $this->assertFalse(FeatureRegistry::check('Undefined Feature'));
     }
 
     /**
-     * @covers ::flush
+     * @expectedException \FeatureToggle\Exception\DuplicateFeatureException
      */
-    public function testFlush()
+    public function itShouldFlushTheRegistry()
     {
-        $Feature = new Feature\BooleanFeature('Test Feature');
-        FeatureRegistry::add('Test Feature', $Feature);
-
+        $feature = new BooleanFeature('Test Feature');
+        FeatureRegistry::add('Test Feature', $feature);
         FeatureRegistry::flush();
-
-        $this->setExpectedException('\InvalidArgumentException');
-
         FeatureRegistry::get('Test Feature');
     }
 
     /**
-     * @covers ::get
-     */
-    public function testGet()
-    {
-        $Feature = new Feature\BooleanFeature('Test Feature');
-        FeatureRegistry::add('Test Feature', $Feature);
-
-        $expected = '\FeatureToggle\Feature\BooleanFeature';
-        $actual = FeatureRegistry::get('Test Feature');
-
-        $this->assertInstanceOf($expected, $actual);
-    }
-
-    /**
-     * @covers ::get
-     * @expectedException \InvalidArgumentException
+     * @test
+     * @expectedException \FeatureToggle\Exception\UnknownFeatureException
      * @expectedExceptionMessage Unknown feature identifier.
      */
-    public function testGetThrowsException()
+    public function itShouldNotFailSilentlyOnUndefinedFeatures()
     {
         FeatureRegistry::get('Undefined Feature');
     }
 
     /**
-     * @covers ::init
+     * @test
      */
-    public function testInit()
+    public function itShouldCreateAndAddFeatureToRegistry()
     {
-        $Feature = FeatureRegistry::init('Test Feature 1');
-
-        $expected = '\FeatureToggle\Feature\BooleanFeature';
-        $actual = $Feature;
-
-        $this->assertInstanceOf($expected, $actual);
+        $feature = FeatureRegistry::init('Test Feature 1');
+        $expected = BooleanFeature::class;
+        $this->assertInstanceOf($expected, $feature);
     }
 }

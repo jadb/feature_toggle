@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the FeatureToggle package.
@@ -9,28 +9,21 @@
  * file that was distributed with this source code.
  */
 
-namespace FeatureToggle;
+namespace FeatureToggle\Test\Feature;
 
 use FeatureToggle\Feature\DisabledFeature;
 
 /**
  * Disabled feature test class.
- *
- * @package FeatureToggle
- * @author Jad Bitar <jadbitar@mac.com>
- * @coversDefaultClass \FeatureToggle\Feature\DisabledFeature
  */
 class DisabledFeatureTest extends \PHPUnit_Framework_TestCase
 {
-    const FEATURE_NAME = 'Disabled Feature Test';
-    const FEATURE_DESC = 'Testing the disabled feature class';
 
     /**
-     * @covers ::isEnabled
+     * @test
      */
-    public function testIsEnabled()
+    public function itShouldAlwaysReturnFalse()
     {
-        $Feature = new DisabledFeature(self::FEATURE_NAME, self::FEATURE_DESC);
-        $this->assertFalse($Feature->isEnabled());
+        $this->assertFalse((new DisabledFeature('foo', 'bar'))->isEnabled());
     }
 }
