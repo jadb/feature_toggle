@@ -81,4 +81,25 @@ final class DateTimeStrategy extends AbstractStrategy
 
         return $result;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function serialize(): string
+    {
+        return json_encode([
+            'reference' => $this->reference->getTimestamp(),
+            'comparator' => serialize($this->comparator),
+        ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function unserialize($serialized)
+    {
+        $data = json_decode($serialized, true);
+        $this->reference = (new \DateTime())->setTimestamp($data['reference']);
+        $this->comparator = unserialize($data['comparator']);
+    }
 }

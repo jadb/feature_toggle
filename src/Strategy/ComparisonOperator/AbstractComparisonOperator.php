@@ -16,13 +16,35 @@ abstract class AbstractComparisonOperator implements ComparisonOperatorInterface
 
     protected $value;
 
+    /**
+     * {@inheritdoc}
+     */
     public function getValue(): string
     {
         return $this->value;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function __toString(): string
     {
         return $this->getValue();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function serialize(): string
+    {
+        return $this->value;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function unserialize($serialized)
+    {
+        $this->value = $serialized;
     }
 }

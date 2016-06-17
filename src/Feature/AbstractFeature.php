@@ -104,4 +104,41 @@ abstract class AbstractFeature implements FeatureInterface
         $feature->name = $name;
         return $feature;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function serialize(): string
+    {
+        $strategies = [];
+        foreach ($this->getStrategies() as $strategy) {
+            $strategies[] = serialize($strategy);
+        }
+
+        $data = [
+            'name' => $this->getName(),
+            'description' => $this->getDescription(),
+            'strategies' => $strategies,
+        ];
+
+        return json_encode($data + get_class_vars(get_class($this)));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function unserialize($serialized)
+    {
+        $properties = json_decode($serialized, true);
+        $strategies = $properties['strategies'];
+        unset($properties['strategies']);
+
+        foreach ($properties as $property => $value) {
+            $this->$property = $value;
+        }
+
+        foreach ($strategies as $strategy) {
+            array_push($this->strategies, unserialize($strategy));
+        }
+    }
 }

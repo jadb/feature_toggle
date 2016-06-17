@@ -64,4 +64,20 @@ class UserAgentStrategy extends AbstractStrategy
 
         return $_SERVER['HTTP_USER_AGENT'];
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function serialize(): string
+    {
+        return json_encode($this->patterns);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function unserialize($serialized)
+    {
+        $this->patterns = json_decode($serialized, true);
+    }
 }

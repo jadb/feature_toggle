@@ -101,4 +101,15 @@ class BooleanFeature extends AbstractFeature
         $feature->isEnabled = $enabled;
         return $feature;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function serialize(): string
+    {
+        return json_encode([
+                'threshold' => $this->threshold,
+                'strict' => $this->strict
+        ] + json_decode(parent::serialize(), true));
+    }
 }

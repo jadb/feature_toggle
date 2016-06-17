@@ -11,7 +11,9 @@
 
 namespace FeatureToggle\Strategy\ComparisonOperator;
 
-interface ComparisonOperatorInterface
+use Serializable;
+
+interface ComparisonOperatorInterface extends Serializable
 {
 
     public function getValue(): string;

@@ -11,10 +11,12 @@
 
 namespace FeatureToggle\Feature;
 
+use Serializable;
+
 /**
  * Feature interface.
  */
-interface FeatureInterface
+interface FeatureInterface extends Serializable
 {
     /**
      * Returns the feature's description.

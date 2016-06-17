@@ -12,15 +12,12 @@
 namespace FeatureToggle\Strategy;
 
 use FeatureToggle\Feature\FeatureInterface;
+use Serializable;
 
 /**
  * Strategy interface.
- *
- * @package FeatureToggle
- * @subpackage FeatureToggle.Strategy
- * @author Jad Bitar <jadbitar@mac.com>
  */
-interface StrategyInterface
+interface StrategyInterface extends Serializable
 {
     /**
      * Tells if strategy passes or not.
