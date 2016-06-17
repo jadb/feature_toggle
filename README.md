@@ -50,6 +50,9 @@ In your application's bootstrap:
 
 ```php
 use FeatureToggle\FeatureRegistry;
+use Predis\Client as Redis;
+
+FeatureRegistry::setStorage(new Redis());
 
 FeatureRegistry::init('Cool Feature', [
 	'description' => 'A cool new feature!',
@@ -107,9 +110,17 @@ Features __MUST__ implement the `FeatureInterface`.
 
 Strategies __MUST__ implement the `StrategyInterface`.
 
+### Storage Adapters
+
+* __HashStorage__: Default. Basic associative array (a.k.a. in memory)
+* __FileStorage__: Filesystem used (only good if features stored in database).
+* __MemcachedStorage__: Memcached store, requires the [`Memcached`][memcached] extension.
+* __RedisStorage__: Redis store, requires the [`predis/predis`][predis] package.
+
+Storage adapaters __MUST__ implement the `StorageInterface`.
+
 ## Todo
 
-* `RedisStorage` to keep track of features
 * `PercentageStrategy` enable feature to a percentage of users - requires `RedisStorage`
 * Option to automatically disable a feature if error threshold reached - requires `RedisStorage`
 
@@ -137,3 +148,5 @@ Redistributions of files must retain the above copyright notice.
 [jadbio]:http://jadb.io
 [mit]:https://github.com/jadb/feature_toggle/blob/master/LICENSE
 [composer]:http://getcomposer.org
+[memcached]:http://php.net/manual/en/book.memcached.php
+[predis]:http://packagist.org/predis/predis
