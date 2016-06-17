@@ -1,7 +1,6 @@
 {
     "name": "jadb/feature_toggle",
     "description": "",
-    "version": "0.0.2",
     "keywords": ["continuous integration", "feature toggle", "feature toggling"],
     "homepage": "http://github.com/jadb/feature_toggle",
     "type": "library",
