@@ -93,8 +93,8 @@ final class DateTimeRangeStrategy extends AbstractStrategy
     public function serialize(): string
     {
         return json_encode([
-            'minRange' => $this->minRange,
-            'maxRange' => $this->maxRange,
+            'minRange' => $this->minRange->getTimestamp(),
+            'maxRange' => $this->maxRange->getTimestamp(),
             'inclusive' => $this->inclusive,
         ]);
     }
@@ -105,8 +105,8 @@ final class DateTimeRangeStrategy extends AbstractStrategy
     public function unserialize($serialized)
     {
         $data = json_decode($serialized, true);
-        $this->minRange = $data['minRange'];
-        $this->maxRange = $data['maxRange'];
+        $this->minRange = (new DateTime('now'))->setTimestamp($data['minRange']);
+        $this->maxRange = (new DateTime('now'))->setTimestamp($data['maxRange']);
         $this->inclusive = $data['inclusive'];
     }
 }
