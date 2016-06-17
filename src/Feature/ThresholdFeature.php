@@ -18,18 +18,17 @@ namespace FeatureToggle\Feature;
  */
 class ThresholdFeature extends BooleanFeature
 {
+
     /**
      * Getter/setter for the `BooleanFeature::$threshold` property.
      *
      * @param int $val The minimum threshold for a feature to be considered enabled.
-     * @return int The minimum threshold for a feature to be considered enabled.
+     * @return \FeatureToggle\Feature\ThresholdFeature The minimum threshold for a feature to be considered enabled.
      */
-    public function threshold(int $val = null): int
+    public function threshold(int $val = null): ThresholdFeature
     {
-        if ($val !== null) {
-            $this->threshold = $val;
-        }
-
-        return $this->threshold;
+        $feature = clone($this);
+        $feature->threshold = $val;
+        return $feature;
     }
 }
